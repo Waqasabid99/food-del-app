@@ -4,12 +4,14 @@ import { MdRestaurantMenu } from "react-icons/md";
 import AdminNavbar from "../components/AdminNavbar";
 import AdminSidebar from "../components/AdminSidebar";
 import { useNavigate } from "react-router-dom";
+import useAdminAuthStore from "@/store/authStore";
 
 const Dashboard = () => {
   const [activeTab, setActiveTab] = useState("dashboard");
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const navigate = useNavigate();
-
+  const { admin, logout } = useAdminAuthStore();
+  console.log(admin)
   // Mock data for dashboard stats
   const dashboardStats = {
     totalOrders: 245,

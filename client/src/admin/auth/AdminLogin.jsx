@@ -1,23 +1,68 @@
+import AdminAuthStore from "@/store/authStore";
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+AdminAuthStore;
 
-const AdminLogin = ({ handleShowLogin, handleShowSignup }) => {
-  const [identifier, setIdentifier] = useState(""); // email or phone
+const AdminLogin = ({ handleShowLogin, handleShowSignup, handleCloseAuth }) => {
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPwd, setShowPwd] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
+  const navigate = useNavigate();
+  const { login } = AdminAuthStore();
+  const isValidEmail = (email) => {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
+  };
 
-  const isEmail = (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim());
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setErrors({});
 
-  const isPhone = (v) => /^\+?\d{10,15}$/.test(v.replace(/\s|-/g, "")); // 10–15 digits, optional +
+    // Validation
+    const newErrors = {};
 
+    if (!email.trim()) {
+      newErrors.email = "Email is required";
+    } else if (!isValidEmail(email)) {
+      newErrors.email = "Please enter a valid email address";
+    }
+
+    if (!password) {
+      newErrors.password = "Password is required";
+    }
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
+
+    setLoading(true);
+    const credentials = { email: email.trim().toLowerCase(), password };
+
+    try {
+      const result = await login(credentials);
+
+      if (result.status === 200 || result.status === 201) {
+        setTimeout(() => {   
+          // Handle successful login
+          handleShowLogin(false);
+        }, 1000)
+      }
+    } catch (error) {
+      setErrors({ form: "Invalid email or password" });
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-white">
+    <div className="flex items-center justify-center min-h-screen bg-white text-black">
+      <ToastContainer />
       <div className="relative w-full max-h-full max-w-md mx-auto shadow-xl rounded-2xl p-6 md:p-8">
         <button
-          onClick={() => handleShowLogin(false)}
+          onClick={() =>  handleCloseAuth()}
           className="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
           aria-label="Close"
         >
@@ -37,7 +82,7 @@ const AdminLogin = ({ handleShowLogin, handleShowSignup }) => {
           </svg>
         </button>
         <h1 className="text-2xl font-bold text-gray-900">Welcome back</h1>
-        <p className="text-gray-500 mt-1">Sign in to your account</p>
+        <p className="text-gray-500 mt-1">Sign in to your admin account</p>
 
         {errors.form && (
           <div className="mt-4 rounded-lg bg-red-50 text-red-700 px-4 py-2 text-sm">
@@ -45,32 +90,33 @@ const AdminLogin = ({ handleShowLogin, handleShowSignup }) => {
           </div>
         )}
 
-        <form className="mt-6 space-y-4" noValidate>
-          {/* Email or Phone */}
+        <form className="mt-6 space-y-4" onSubmit={handleSubmit} noValidate>
+          {/* Email */}
           <div>
             <label
-              htmlFor="identifier"
+              htmlFor="email"
               className="block text-sm font-medium text-gray-700"
             >
-              Email or phone
+              Email Address
             </label>
             <input
-              id="identifier"
-              name="identifier"
+              id="email"
+              name="email"
+              type="email"
               inputMode="email"
               autoComplete="username"
-              placeholder="e.g. alex@mail.com or +12345678901"
+              placeholder="e.g. admin@company.com"
               className={`mt-1 w-full rounded-lg border px-4 py-3 outline-none focus:ring-2
               ${
-                errors.identifier
+                errors.email
                   ? "border-red-500 focus:ring-red-400"
                   : "border-gray-300 focus:ring-orange-400"
               }`}
-              value={identifier}
-              onChange={(e) => setIdentifier(e.target.value)}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
-            {errors.identifier && (
-              <p className="mt-1 text-sm text-red-600">{errors.identifier}</p>
+            {errors.email && (
+              <p className="mt-1 text-sm text-red-600">{errors.email}</p>
             )}
           </div>
 
@@ -142,13 +188,12 @@ const AdminLogin = ({ handleShowLogin, handleShowSignup }) => {
         </form>
 
         <p className="mt-6 text-center text-sm text-gray-600">
-          Don’t have an account?{" "}
+          Don't have an account?{" "}
           <Link
             onClick={() => {
               handleShowSignup(true);
               handleShowLogin(false);
             }}
-            to="signup"
             className="font-medium text-orange-600 hover:underline"
           >
             Sign up
