@@ -8,4 +8,7 @@ userRouter.post("/login", userService.loginUser)
 userRouter.post("/logout", userService.logoutUser)
 userRouter.get("/getuser/:id", userAuth.verifyToken, userService.getUserById)
 userRouter.put("/update/:id", userAuth.verifyToken, userService.updateUser)
+userRouter.get("/getall", userService.getAllUsers)
+userRouter.delete("/delete/:id", userService.deleteUser)
+
 module.exports = userRouter

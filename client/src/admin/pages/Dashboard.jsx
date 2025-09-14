@@ -5,6 +5,7 @@ import AdminNavbar from "../components/AdminNavbar";
 import AdminSidebar from "../components/AdminSidebar";
 import { useNavigate } from "react-router-dom";
 import useAdminAuthStore from "@/store/authStore";
+import Orders from "../components/Orders";
 
 const Dashboard = () => {
   const [activeTab, setActiveTab] = useState("dashboard");
@@ -309,27 +310,28 @@ const Dashboard = () => {
 
             {/* Other tabs content */}
             {activeTab === "orders" && (
-              <div>
-                <div className="mb-8">
-                  <h2 className="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-2 transition-colors duration-300">
-                    Orders Management
-                  </h2>
-                  <p className="text-gray-600 dark:text-gray-300 transition-colors duration-300">
-                    Manage and track all customer orders.
-                  </p>
-                </div>
-                <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-2xl border border-gray-200 dark:border-gray-700 p-6 transition-colors duration-300">
-                  <div className="text-center py-12">
-                    <span className="text-6xl mb-4 block">📦</span>
-                    <h3 className="text-lg font-medium text-gray-800 dark:text-gray-100 mb-2 transition-colors duration-300">
-                      Orders Management
-                    </h3>
-                    <p className="text-gray-600 dark:text-gray-300 transition-colors duration-300">
-                      Full orders management interface will be implemented here.
-                    </p>
-                  </div>
-                </div>
-              </div>
+              <Orders />
+              // <div>
+              //   <div className="mb-8">
+              //     <h2 className="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-2 transition-colors duration-300">
+              //       Orders Management
+              //     </h2>
+              //     <p className="text-gray-600 dark:text-gray-300 transition-colors duration-300">
+              //       Manage and track all customer orders.
+              //     </p>
+              //   </div>
+              //   <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-2xl border border-gray-200 dark:border-gray-700 p-6 transition-colors duration-300">
+              //     <div className="text-center py-12">
+              //       <span className="text-6xl mb-4 block">📦</span>
+              //       <h3 className="text-lg font-medium text-gray-800 dark:text-gray-100 mb-2 transition-colors duration-300">
+              //         Orders Management
+              //       </h3>
+              //       <p className="text-gray-600 dark:text-gray-300 transition-colors duration-300">
+              //         Full orders management interface will be implemented here.
+              //       </p>
+              //     </div>
+              //   </div>
+              // </div>
             )}
 
             {activeTab === "customers" && (

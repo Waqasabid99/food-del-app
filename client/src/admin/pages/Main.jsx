@@ -9,6 +9,8 @@ import AddProduct from "../components/AddProduct";
 import AddMenu from "../components/AddMenu";
 import Menu from "../components/Menu";
 import AdminOrders from "../components/Orders";
+import Customers from "../components/Customers";
+import Settings from "../components/Settings";
 
 const Main = () => {
   const [showLogin, setShowLogin] = useState(false);
@@ -51,6 +53,8 @@ const Main = () => {
             <Route path="/add-product" element={<AddProduct />} />
             <Route path="/add-menu" element={<AddMenu />} />
             <Route path="/orders" element={<AdminOrders />} />
+            <Route path="/customers" element={<Customers />} />
+            <Route path="/settings" element={<Settings />} />
           </Routes>
         </>
       ) : (

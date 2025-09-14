@@ -36,19 +36,19 @@ const AdminSidebar = ({ activeTab, setActiveTab, sidebarCollapsed }) => {
       id: "orders",
       label: "Orders",
       icon: <IoCartOutline />,
-      action: () => setActiveTab("orders"),
+      action: () => navigate("/admin/orders"),
     },
     {
       id: "customers",
       label: "Customers",
       icon: <FaRegUser />,
-      action: () => setActiveTab("customers"),
+      action: () => navigate("/admin/customers"),
     },
     {
       id: "settings",
       label: "Settings",
       icon: <IoSettingsOutline />,
-      action: () => setActiveTab("settings"),
+      action: () => navigate("/admin/settings"),
     },
   ];
 

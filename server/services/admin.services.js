@@ -105,6 +105,7 @@ const logoutAdmin = async (req, res) => {
     }
 }
 
+
 module.exports = {
     createAdmin,
     loginAdmin,
