@@ -10,14 +10,14 @@ import axios from "axios";
 import ThemeToggleButton from "./ui/theme-toggle-button";
 import useAuth from "@/context/useAuth";
 
-const Navbar = ({ handleShowLogin }) => {
+const Navbar = ({ handleShowLogin, handleShowSignup, handleCloseAuth }) => {
   const [showSearch, setShowSearch] = useState(false);
   const [searchText, setSearchText] = useState("");
   const [showCartItems, setShowCartitems] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [food_list, setFoodList] = useState([]);
   const searchRef = useRef(null);
-  const { cart } = useCart();
+  const { cart, removeFromCart } = useCart();
   const navigate = useNavigate();
   const base_url =
     import.meta.env.VITE_BACKEND_BASE_URL || "http://localhost:5000";
@@ -282,7 +282,7 @@ const Navbar = ({ handleShowLogin }) => {
                         <div className="text-sm text-gray-600 dark:text-gray-400 mr-2">
                           {item.quantity}
                         </div>
-                        <button className="text-gray-400 dark:text-gray-500 hover:text-red-500 dark:hover:text-red-400 transition-colors duration-200">
+                        <button onClick={() => removeFromCart(item._id)} className="text-gray-400 dark:text-gray-500 hover:text-red-500 dark:hover:text-red-400 transition-colors duration-200">
                           ×
                         </button>
                       </div>
@@ -322,7 +322,7 @@ const Navbar = ({ handleShowLogin }) => {
           )}
           {!isAuthenticated && (
             <button
-              onClick={() => handleShowLogin(true)}
+              onClick={() => handleShowLogin()}
               className="hidden sm:block border-[1px] border-black dark:border-gray-400 px-4 lg:px-6 py-1 rounded-full text-[16px] lg:text-[20px] text-black dark:text-gray-200 hover:transition-all hover:duration-300 hover:bg-black dark:hover:bg-gray-200 hover:text-white dark:hover:text-gray-800 transition-colors duration-300"
             >
               Sign-in
@@ -458,7 +458,7 @@ const Navbar = ({ handleShowLogin }) => {
             {!isAuthenticated && (
               <button
                 onClick={() => {
-                  handleShowLogin(true);
+                  handleShowLogin();
                   closeMobileMenu();
                 }}
                 className="mt-6 border-[1px] border-black dark:border-gray-400 px-6 py-2 rounded-full text-lg text-black dark:text-gray-200 hover:bg-black dark:hover:bg-gray-200 hover:text-white dark:hover:text-gray-800 transition-all duration-300"

@@ -9,25 +9,30 @@ import { useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import axios from "axios";
 
-const Menu = ({ handleShowLogin }) => {
+const Menu = ({ handleShowLogin, handleShowSignup, handleCloseAuth }) => {
   const { showLogin, showSignup } = useAuthStore();
   const [active, setActive] = useState({ index: null, category: null });
   const navigate = useNavigate();
   const { addToCart } = useCart();
-  const base_url = import.meta.env.VITE_BACKEND_BASE_URL || "http://localhost:5000";
+  const base_url =
+    import.meta.env.VITE_BACKEND_BASE_URL || "http://localhost:5000";
   const [food_list, setFoodList] = useState([]);
   const [menu_list, setMenuList] = useState([]);
 
   useEffect(() => {
-    axios.get(`${base_url}/api/menu/getmenu`, { withCredentials: true }).then((res) => {
-      setMenuList(res.data.data);
-      console.log(res.data.data)
-    })
-    axios.get(`${base_url}/api/food/getfood`, { withCredentials: true }).then((res) => {
-      setFoodList(res.data.data);
-      console.log(res.data.data)
-    })
-  }, [setMenuList, setFoodList])
+    axios
+      .get(`${base_url}/api/menu/getmenu`, { withCredentials: true })
+      .then((res) => {
+        setMenuList(res.data.data);
+        console.log(res.data.data);
+      });
+    axios
+      .get(`${base_url}/api/food/getfood`, { withCredentials: true })
+      .then((res) => {
+        setFoodList(res.data.data);
+        console.log(res.data.data);
+      });
+  }, [setMenuList, setFoodList]);
 
   const getActive = (index, name) => {
     if (active.index === index) {
@@ -72,7 +77,11 @@ const Menu = ({ handleShowLogin }) => {
     <>
       {!showLogin && !showSignup && (
         <>
-          <Navbar handleShowLogin={handleShowLogin} />
+          <Navbar
+            handleShowSignup={handleShowSignup}
+            handleShowLogin={handleShowLogin}
+            handleCloseAuth={handleCloseAuth}
+          />
 
           {/* Hero Section */}
           <div className="bg-gradient-to-r from-orange-50 to-orange-100 dark:from-gray-800 dark:to-gray-700 py-16 px-6 transition-colors duration-300">

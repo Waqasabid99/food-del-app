@@ -6,7 +6,7 @@ import useAuth from "@/context/useAuth";
 import axios from "axios";
 import { ToastContainer } from "react-toastify";
 
-const Signup = ({ handleShowSignup, handleShowLogin }) => {
+const Signup = ({ handleShowSignup, handleShowLogin, handleCloseAuth }) => {
   const [formData, setFormData] = useState({
     phone: "",
     name: "",
@@ -137,7 +137,7 @@ const Signup = ({ handleShowSignup, handleShowLogin }) => {
         
         // Close the signup modal
         setTimeout(() => {
-          handleShowSignup(false);
+          handleCloseAuth()
         }, 1000)
         
       } else {
@@ -158,7 +158,7 @@ const Signup = ({ handleShowSignup, handleShowLogin }) => {
       <ToastContainer />
       <div className="relative max-h-fit w-[400px] bg-white dark:bg-gray-800 shadow-lg dark:shadow-2xl rounded-2xl p-6 transition-all duration-300 border-0 dark:border dark:border-gray-600">
         <button
-          onClick={() => handleShowSignup(false)}
+          onClick={() => handleCloseAuth()}
           className="absolute top-4 right-4 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors duration-300"
           aria-label="Close"
         >
@@ -315,7 +315,6 @@ const Signup = ({ handleShowSignup, handleShowLogin }) => {
               handleShowSignup(false);
               handleShowLogin(true);
             }}
-            to="/login"
             className="text-orange-500 font-semibold hover:text-orange-600 transition-colors duration-300"
           >
             Login

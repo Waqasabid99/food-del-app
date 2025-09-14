@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import useAuth from "../store/useAuthStore";
 import { ToastContainer } from "react-toastify";
 
-const Login = ({ handleShowLogin, handleShowSignup }) => {
+const Login = ({ handleShowLogin, handleShowSignup, handleCloseAuth }) => {
   const [formData, setFormData] = useState({
     phone: "",
     password: "",
@@ -59,7 +59,7 @@ const Login = ({ handleShowLogin, handleShowSignup }) => {
       console.log("Login successful:", result.message);
 
       setTimeout(() => {
-        handleShowLogin(false);
+        handleCloseAuth()
       }, 1000);
     }
     // Error will be handled by the store and displayed in UI
@@ -70,7 +70,7 @@ const Login = ({ handleShowLogin, handleShowSignup }) => {
       <ToastContainer />
       <div className="relative max-h-fit w-[400px] bg-white dark:bg-gray-800 shadow-lg dark:shadow-2xl rounded-2xl p-6 transition-all duration-300 border-0 dark:border dark:border-gray-600">
         <button
-          onClick={() => handleShowLogin(false)}
+          onClick={() => handleCloseAuth()}
           className="absolute top-4 right-4 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors duration-300"
           aria-label="Close"
           disabled={isLoading}

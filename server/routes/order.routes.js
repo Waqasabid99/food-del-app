@@ -12,7 +12,7 @@ orderRouter.put("/cancel/:id", userAuth.verifyToken, orderService.cancelOrder);
 
 // Admin routes (require admin authentication - you should create adminAuth middleware)
 // For now using verifyToken, but you should create a separate admin middleware
-orderRouter.get("/admin/all", userAuth.verifyToken, orderService.getAllOrders);
-orderRouter.put("/admin/status/:id", userAuth.verifyToken, orderService.updateOrderStatus);
+orderRouter.get("/admin/all", orderService.getAllOrders);
+orderRouter.put("/admin/status/:id", orderService.updateOrderStatus);
 
 module.exports = orderRouter;

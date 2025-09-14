@@ -9,7 +9,11 @@ import Newsletter from "../components/Newsletter";
 import { useCart } from "../context/CartContext";
 import axios from "axios";
 
-const SingleProduct = ({ handleShowLogin }) => {
+const SingleProduct = ({
+  handleShowLogin,
+  handleShowSignup,
+  handleCloseAuth,
+}) => {
   // From AuthStore (Zustand)
   const { showLogin, showSignup } = useAuthStore();
   const [quantity, setQuantity] = useState(1);
@@ -60,7 +64,11 @@ const SingleProduct = ({ handleShowLogin }) => {
     <>
       {!showLogin && !showSignup && (
         <div className="bg-white dark:bg-gray-900 transition-colors duration-300">
-          <Navbar handleShowLogin={handleShowLogin} />
+          <Navbar
+            handleShowSignup={handleShowSignup}
+            handleShowLogin={handleShowLogin}
+            handleCloseAuth={handleCloseAuth}
+          />
           {/* Product Section */}
           <div className="main flex flex-col md:flex-row w-full p-6 gap-8">
             {/* Left Section - Product Image */}

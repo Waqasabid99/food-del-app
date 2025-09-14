@@ -5,13 +5,25 @@ import Footer from "../components/Footer";
 import { useCart } from "../context/CartContext";
 import useAuth from "@/context/useAuth";
 
-const Checkout = ({ handleShowLogin }) => {
+const Checkout = ({ handleShowLogin, handleShowSignup, handleCloseAuth }) => {
   const navigate = useNavigate();
   const [isLogin, setIsLogin] = useState(true);
   const [authStep, setAuthStep] = useState("auth"); // "auth" | "details"
-  const { showLogin, showSignup, login, register, isLoading, error, clearError, isAuthenticated, user, token } = useAuth();
+  const {
+    showLogin,
+    showSignup,
+    login,
+    register,
+    isLoading,
+    error,
+    clearError,
+    isAuthenticated,
+    user,
+    token,
+  } = useAuth();
   const { cart, clearCart } = useCart();
-  const base_url = import.meta.env.VITE_BACKEND_BASE_URL || "http://localhost:5000";
+  const base_url =
+    import.meta.env.VITE_BACKEND_BASE_URL || "http://localhost:5000";
 
   const [formData, setFormData] = useState({
     email: "",
@@ -22,13 +34,13 @@ const Checkout = ({ handleShowLogin }) => {
     city: "",
     zipCode: "",
     paymentMethod: "cash",
-    specialInstructions: ""
+    specialInstructions: "",
   });
 
   // Fill form with user data when authenticated
   useEffect(() => {
     if (isAuthenticated && user) {
-      setFormData(prev => ({
+      setFormData((prev) => ({
         ...prev,
         email: user.email || "",
         phone: user.phone || "",
@@ -68,13 +80,13 @@ const Checkout = ({ handleShowLogin }) => {
 
   const handleAuthSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (isLogin) {
       // Login flow - need email OR phone, not both
       const credentials = {
         password: formData.password,
       };
-      
+
       // Use email or phone based on what user filled
       if (formData.email && !formData.phone) {
         credentials.email = formData.email;
@@ -127,7 +139,7 @@ const Checkout = ({ handleShowLogin }) => {
 
   const handleOrderSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!isAuthenticated) {
       alert("Please log in or register to place your order");
       return;
@@ -151,39 +163,39 @@ const Checkout = ({ handleShowLogin }) => {
 
     try {
       const orderData = {
-        items: cart.map(item => ({
+        items: cart.map((item) => ({
           id: item._id || item.id,
           name: item.name,
           price: item.price,
           quantity: item.quantity,
-          image: item.image
+          image: item.image,
         })),
         deliveryAddress: {
           street: formData.address,
           city: formData.city,
-          zipCode: formData.zipCode
+          zipCode: formData.zipCode,
         },
         contactInfo: {
           phone: formData.phone,
-          email: formData.email || ""
+          email: formData.email || "",
         },
         paymentMethod: formData.paymentMethod,
         pricing: {
           subtotal: parseFloat(subtotal.toFixed(2)),
           deliveryFee: parseFloat(deliveryFee.toFixed(2)),
           tax: parseFloat(tax.toFixed(2)),
-          total: parseFloat(total.toFixed(2))
+          total: parseFloat(total.toFixed(2)),
         },
-        specialInstructions: formData.specialInstructions || ""
+        specialInstructions: formData.specialInstructions || "",
       };
 
       const response = await fetch(`${base_url}/api/order/create`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(orderData)
+        body: JSON.stringify(orderData),
       });
 
       const result = await response.json();
@@ -191,17 +203,17 @@ const Checkout = ({ handleShowLogin }) => {
       if (response.ok) {
         console.log("Order placed successfully:", result);
         clearCart();
-        navigate('/thank-you', { 
-          state: { 
+        navigate("/thank-you", {
+          state: {
             orderNumber: result.orderNumber,
-            total: total.toFixed(2)
-          } 
+            total: total.toFixed(2),
+          },
         });
       } else {
-        throw new Error(result.message || 'Failed to place order');
+        throw new Error(result.message || "Failed to place order");
       }
     } catch (error) {
-      console.error('Order placement error:', error);
+      console.error("Order placement error:", error);
       alert(`Failed to place order: ${error.message}`);
     }
   };
@@ -224,7 +236,11 @@ const Checkout = ({ handleShowLogin }) => {
 
   return (
     <div className="bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
-      <Navbar handleShowLogin={handleShowLogin} />
+      <Navbar
+        handleShowSignup={handleShowSignup}
+        handleShowLogin={handleShowLogin}
+        handleCloseAuth={handleCloseAuth}
+      />
       <div className="min-h-screen py-8 px-5">
         <div className="max-w-7xl mx-auto px-4">
           {/* Header */}
@@ -233,10 +249,9 @@ const Checkout = ({ handleShowLogin }) => {
               Checkout
             </h1>
             <p className="text-gray-600 dark:text-gray-300 transition-colors duration-300">
-              {isAuthenticated 
-                ? `Complete your order${user?.name ? `, ${user.name}` : ''}` 
-                : "Please log in or register to continue"
-              }
+              {isAuthenticated
+                ? `Complete your order${user?.name ? `, ${user.name}` : ""}`
+                : "Please log in or register to continue"}
             </p>
           </div>
 
@@ -244,7 +259,6 @@ const Checkout = ({ handleShowLogin }) => {
             {/* Left Side - Checkout Form */}
             <div className="lg:col-span-2">
               <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-2xl border border-gray-200 dark:border-gray-700 p-6 transition-colors duration-300">
-                
                 {/* Auth Step */}
                 {authStep === "auth" && !isAuthenticated && (
                   <>
@@ -258,7 +272,9 @@ const Checkout = ({ handleShowLogin }) => {
                             isLogin
                               ? "bg-white dark:bg-gray-600 text-orange-500 dark:text-orange-400 shadow-sm"
                               : "text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100"
-                          } ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                          } ${
+                            isLoading ? "opacity-50 cursor-not-allowed" : ""
+                          }`}
                         >
                           Login
                         </button>
@@ -269,7 +285,9 @@ const Checkout = ({ handleShowLogin }) => {
                             !isLogin
                               ? "bg-white dark:bg-gray-600 text-orange-500 dark:text-orange-400 shadow-sm"
                               : "text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100"
-                          } ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                          } ${
+                            isLoading ? "opacity-50 cursor-not-allowed" : ""
+                          }`}
                         >
                           Register
                         </button>
@@ -287,13 +305,20 @@ const Checkout = ({ handleShowLogin }) => {
                       {/* Account Information */}
                       <div>
                         <h3 className="text-lg font-medium text-gray-800 dark:text-gray-100 mb-4 transition-colors duration-300">
-                          {isLogin ? "Login to Your Account" : "Create New Account"}
+                          {isLogin
+                            ? "Login to Your Account"
+                            : "Create New Account"}
                         </h3>
                         <div className="space-y-4">
                           {shouldShowEmailField() && (
                             <div>
                               <label className="block text-sm text-gray-600 dark:text-gray-300 mb-2 transition-colors duration-300">
-                                Email {isLogin ? "" : <span className="text-red-500">*</span>}
+                                Email{" "}
+                                {isLogin ? (
+                                  ""
+                                ) : (
+                                  <span className="text-red-500">*</span>
+                                )}
                               </label>
                               <input
                                 type="email"
@@ -302,7 +327,9 @@ const Checkout = ({ handleShowLogin }) => {
                                 onChange={handleInputChange}
                                 disabled={isLoading}
                                 className={`w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:border-orange-400 dark:focus:border-orange-400 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 transition-colors duration-300 ${
-                                  isLoading ? 'opacity-50 cursor-not-allowed' : ''
+                                  isLoading
+                                    ? "opacity-50 cursor-not-allowed"
+                                    : ""
                                 }`}
                                 placeholder="your@email.com"
                                 required={!isLogin && !formData.phone}
@@ -313,7 +340,12 @@ const Checkout = ({ handleShowLogin }) => {
                           {shouldShowPhoneField() && (
                             <div>
                               <label className="block text-sm text-gray-600 dark:text-gray-300 mb-2 transition-colors duration-300">
-                                Phone {isLogin ? "" : <span className="text-red-500">*</span>}
+                                Phone{" "}
+                                {isLogin ? (
+                                  ""
+                                ) : (
+                                  <span className="text-red-500">*</span>
+                                )}
                               </label>
                               <input
                                 type="tel"
@@ -322,7 +354,9 @@ const Checkout = ({ handleShowLogin }) => {
                                 onChange={handleInputChange}
                                 disabled={isLoading}
                                 className={`w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:border-orange-400 dark:focus:border-orange-400 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 transition-colors duration-300 ${
-                                  isLoading ? 'opacity-50 cursor-not-allowed' : ''
+                                  isLoading
+                                    ? "opacity-50 cursor-not-allowed"
+                                    : ""
                                 }`}
                                 placeholder="+1 (555) 123-4567"
                                 required={!isLogin && !formData.email}
@@ -342,7 +376,9 @@ const Checkout = ({ handleShowLogin }) => {
                                 onChange={handleInputChange}
                                 disabled={isLoading}
                                 className={`w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:border-orange-400 dark:focus:border-orange-400 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 transition-colors duration-300 ${
-                                  isLoading ? 'opacity-50 cursor-not-allowed' : ''
+                                  isLoading
+                                    ? "opacity-50 cursor-not-allowed"
+                                    : ""
                                 }`}
                                 placeholder="Your full name"
                                 required
@@ -361,7 +397,7 @@ const Checkout = ({ handleShowLogin }) => {
                               onChange={handleInputChange}
                               disabled={isLoading}
                               className={`w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:border-orange-400 dark:focus:border-orange-400 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 transition-colors duration-300 ${
-                                isLoading ? 'opacity-50 cursor-not-allowed' : ''
+                                isLoading ? "opacity-50 cursor-not-allowed" : ""
                               }`}
                               placeholder="••••••••"
                               required
@@ -378,14 +414,32 @@ const Checkout = ({ handleShowLogin }) => {
                       >
                         {isLoading ? (
                           <>
-                            <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            <svg
+                              className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                            >
+                              <circle
+                                className="opacity-25"
+                                cx="12"
+                                cy="12"
+                                r="10"
+                                stroke="currentColor"
+                                strokeWidth="4"
+                              ></circle>
+                              <path
+                                className="opacity-75"
+                                fill="currentColor"
+                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                              ></path>
                             </svg>
-                            {isLogin ? 'Logging in...' : 'Registering...'}
+                            {isLogin ? "Logging in..." : "Registering..."}
                           </>
+                        ) : isLogin ? (
+                          "Login & Continue"
                         ) : (
-                          isLogin ? 'Login & Continue' : 'Register & Continue'
+                          "Register & Continue"
                         )}
                       </button>
                     </form>
@@ -413,7 +467,7 @@ const Checkout = ({ handleShowLogin }) => {
                             className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-sm bg-gray-100 dark:bg-gray-600 text-gray-700 dark:text-gray-300 cursor-not-allowed transition-colors duration-300"
                           />
                         </div>
-                        
+
                         {/* Phone field - always editable for order delivery */}
                         <div>
                           <label className="block text-sm text-gray-600 dark:text-gray-300 mb-2 transition-colors duration-300">
@@ -477,7 +531,8 @@ const Checkout = ({ handleShowLogin }) => {
                       <div className="space-y-4">
                         <div>
                           <label className="block text-sm text-gray-600 dark:text-gray-300 mb-2 transition-colors duration-300">
-                            Street Address <span className="text-red-500">*</span>
+                            Street Address{" "}
+                            <span className="text-red-500">*</span>
                           </label>
                           <input
                             type="text"
@@ -602,7 +657,7 @@ const Checkout = ({ handleShowLogin }) => {
                         alt={item.name}
                         className="w-12 h-12 object-cover rounded"
                         onError={(e) => {
-                          e.target.src = '/placeholder-food.jpg'; // Fallback image
+                          e.target.src = "/placeholder-food.jpg"; // Fallback image
                         }}
                       />
                       <div className="flex-1 px-3">
@@ -659,14 +714,36 @@ const Checkout = ({ handleShowLogin }) => {
                 {(authStep === "details" || isAuthenticated) && (
                   <button
                     onClick={handleOrderSubmit}
-                    disabled={isLoading || !formData.phone || !formData.address || !formData.city || !formData.zipCode}
+                    disabled={
+                      isLoading ||
+                      !formData.phone ||
+                      !formData.address ||
+                      !formData.city ||
+                      !formData.zipCode
+                    }
                     className="w-full mt-6 bg-orange-500 dark:bg-orange-600 text-white py-3 rounded-lg text-sm font-medium hover:bg-orange-600 dark:hover:bg-orange-700 transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
                   >
                     {isLoading ? (
                       <>
-                        <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        <svg
+                          className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                        >
+                          <circle
+                            className="opacity-25"
+                            cx="12"
+                            cy="12"
+                            r="10"
+                            stroke="currentColor"
+                            strokeWidth="4"
+                          ></circle>
+                          <path
+                            className="opacity-75"
+                            fill="currentColor"
+                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                          ></path>
                         </svg>
                         Placing Order...
                       </>
@@ -676,13 +753,19 @@ const Checkout = ({ handleShowLogin }) => {
                   </button>
                 )}
 
-                {(authStep === "details" || isAuthenticated) && (!formData.phone || !formData.address || !formData.city || !formData.zipCode) && (
-                  <div className="mt-4 p-3 bg-orange-50 dark:bg-orange-900/30 border border-orange-200 dark:border-orange-700 rounded-lg">
-                    <p className="text-sm text-orange-800 dark:text-orange-300 text-center">
-                      {!formData.phone ? "Phone number is required" : "Please complete all delivery address fields"}
-                    </p>
-                  </div>
-                )}
+                {(authStep === "details" || isAuthenticated) &&
+                  (!formData.phone ||
+                    !formData.address ||
+                    !formData.city ||
+                    !formData.zipCode) && (
+                    <div className="mt-4 p-3 bg-orange-50 dark:bg-orange-900/30 border border-orange-200 dark:border-orange-700 rounded-lg">
+                      <p className="text-sm text-orange-800 dark:text-orange-300 text-center">
+                        {!formData.phone
+                          ? "Phone number is required"
+                          : "Please complete all delivery address fields"}
+                      </p>
+                    </div>
+                  )}
 
                 {authStep === "auth" && !isAuthenticated && (
                   <div className="mt-6 p-4 bg-yellow-50 dark:bg-yellow-900/30 border border-yellow-200 dark:border-yellow-700 rounded-lg">
@@ -706,5 +789,5 @@ const Checkout = ({ handleShowLogin }) => {
       <Footer />
     </div>
   );
-}
+};
 export default Checkout;

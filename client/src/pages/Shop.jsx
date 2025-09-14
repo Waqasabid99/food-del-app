@@ -3,14 +3,14 @@ import { GoPlus } from "react-icons/go";
 // import { food_list } from "../data/store";
 import { menu_list } from "../data/store";
 import { useNavigate } from "react-router-dom";
-import { useCart } from "../context/CartContext"; 
+import { useCart } from "../context/CartContext";
 import useAuthStore from "../store/authStore";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { useEffect } from "react";
 import axios from "axios";
 
-const Shop = ({ handleShowLogin }) => {
+const Shop = ({ handleShowLogin, handleShowSignup, handleCloseAuth }) => {
   const [filters, setFilters] = useState({
     category: "",
     priceRange: "",
@@ -21,13 +21,14 @@ const Shop = ({ handleShowLogin }) => {
   const { addToCart } = useCart();
   const { showLogin, showSignup } = useAuthStore();
   const [food_list, setFoodList] = useState([]);
-  const base_url = import.meta.env.VITE_BACKEND_BASE_URL || "http://localhost:5000";
-  
-  useEffect(()=> {
+  const base_url =
+    import.meta.env.VITE_BACKEND_BASE_URL || "http://localhost:5000";
+
+  useEffect(() => {
     axios.get(`${base_url}/api/food/getfood`).then((res) => {
       setFoodList(res.data.data);
-    })
-  }, [setFoodList])
+    });
+  }, [setFoodList]);
 
   const priceRanges = [
     { label: "All Prices", value: "" },
@@ -39,7 +40,7 @@ const Shop = ({ handleShowLogin }) => {
   const showSingleProduct = (id) => {
     navigate(`/product/${id}`);
   };
-  
+
   // Filter products based on selected filters
   const filteredProducts = food_list.filter((product) => {
     const categoryMatch =
@@ -95,7 +96,11 @@ const Shop = ({ handleShowLogin }) => {
     <>
       {!showLogin && !showSignup && (
         <>
-          <Navbar handleShowLogin={handleShowLogin} />
+          <Navbar
+            handleShowSignup={handleShowSignup}
+            handleShowLogin={handleShowLogin}
+            handleCloseAuth={handleCloseAuth}
+          />
           <div className="shop-page w-full py-3 px-4 sm:py-5 sm:px-6 lg:px-10 bg-white dark:bg-gray-900 transition-colors duration-300">
             {/* Header */}
             <div className="headings w-full mb-6 sm:mb-8">
@@ -115,13 +120,17 @@ const Shop = ({ handleShowLogin }) => {
                 onClick={() => setShowMobileFilters(!showMobileFilters)}
                 className="w-full bg-orange-500 dark:bg-gray-600 text-white dark:text-gray-100 py-2 px-4 rounded-lg font-medium hover:bg-orange-600 dark:hover:bg-gray-700 transition-colors duration-300"
               >
-                {showMobileFilters ? 'Hide Filters' : 'Show Filters'}
+                {showMobileFilters ? "Hide Filters" : "Show Filters"}
               </button>
             </div>
 
             <div className="flex flex-col lg:flex-row gap-4 lg:gap-8">
               {/* Sidebar Filters */}
-              <div className={`sidebar w-full lg:w-[280px] lg:flex-shrink-0 ${showMobileFilters ? 'block' : 'hidden lg:block'}`}>
+              <div
+                className={`sidebar w-full lg:w-[280px] lg:flex-shrink-0 ${
+                  showMobileFilters ? "block" : "hidden lg:block"
+                }`}
+              >
                 <div className="filters bg-gray-50 dark:bg-gray-800 p-4 sm:p-5 rounded-lg transition-colors duration-300">
                   <div className="flex justify-between items-center mb-4">
                     <h2 className="text-lg font-semibold text-black dark:text-gray-100 transition-colors duration-300">
@@ -241,7 +250,7 @@ const Shop = ({ handleShowLogin }) => {
                       <span className="hidden">{item.category}</span>
                       <img
                         className="rounded-t-xl w-full h-48 sm:h-56 md:h-64 object-cover"
-                      src={`${base_url}/uploads/foodImages/${item.image}`}
+                        src={`${base_url}/uploads/foodImages/${item.image}`}
                         alt={item.name}
                         onClick={() => showSingleProduct(item._id)}
                       />
