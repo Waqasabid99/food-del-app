@@ -3,11 +3,10 @@ import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import { Link } from "react-router-dom";
 import useAuth from "../store/useAuthStore";
+import { ToastContainer } from "react-toastify";
 
 const Login = ({ handleShowLogin, handleShowSignup }) => {
-  const [useEmail, setUseEmail] = useState(true);
   const [formData, setFormData] = useState({
-    email: "",
     phone: "",
     password: "",
   });
@@ -15,16 +14,16 @@ const Login = ({ handleShowLogin, handleShowSignup }) => {
   const { login, isLoading, error, clearError, isAuthenticated } = useAuth();
 
   // Redirect if already authenticated
-  useEffect(() => {
-    if (isAuthenticated) {
-      handleShowLogin(false);
-    }
-  }, [isAuthenticated, handleShowLogin]);
+  // useEffect(() => {
+  //   if (isAuthenticated) {
+  //     handleShowLogin(false);
+  //   }
+  // }, [isAuthenticated, handleShowLogin]);
 
-  // Clear error when component mounts or when switching between email/phone
+  // Clear error when component mounts
   useEffect(() => {
     clearError();
-  }, [useEmail, clearError]);
+  }, [clearError]);
 
   const handleChange = (e) => {
     setFormData({
@@ -47,29 +46,28 @@ const Login = ({ handleShowLogin, handleShowSignup }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    // Prepare credentials based on selected method
+    // Prepare credentials with phone and password
     const credentials = {
+      phone: formData.phone,
       password: formData.password,
     };
 
-    if (useEmail) {
-      credentials.email = formData.email;
-    } else {
-      credentials.phone = formData.phone;
-    }
-
     const result = await login(credentials);
     
-    if (result.success) {
-      // Login successful, component will unmount due to useEffect
+    if (result.status === 200 || result.status === 201) {
+      // Login successful, component will unmount
       console.log("Login successful:", result.message);
-      handleShowLogin(false);
+
+      setTimeout(() => {
+        handleShowLogin(false);
+      }, 1000);
     }
     // Error will be handled by the store and displayed in UI
   };
 
   return (
     <div className="w-full flex h-screen items-center justify-center py-10 bg-white dark:bg-gray-900 transition-colors duration-300">
+      <ToastContainer />
       <div className="relative max-h-fit w-[400px] bg-white dark:bg-gray-800 shadow-lg dark:shadow-2xl rounded-2xl p-6 transition-all duration-300 border-0 dark:border dark:border-gray-600">
         <button
           onClick={() => handleShowLogin(false)}
@@ -104,74 +102,26 @@ const Login = ({ handleShowLogin, handleShowSignup }) => {
           </div>
         )}
 
-        {/* Switch Option */}
-        <div className="flex justify-center mb-4 gap-3">
-          <button
-            type="button"
-            onClick={() => setUseEmail(true)}
-            disabled={isLoading}
-            className={`px-4 py-2 rounded-lg transition-all duration-300 ${
-              useEmail 
-                ? "bg-orange-500 text-white" 
-                : "bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200"
-            } ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
-          >
-            Use Email
-          </button>
-          <button
-            type="button"
-            onClick={() => setUseEmail(false)}
-            disabled={isLoading}
-            className={`px-4 py-2 rounded-lg transition-all duration-300 ${
-              !useEmail 
-                ? "bg-orange-500 text-white" 
-                : "bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200"
-            } ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
-          >
-            Use Phone
-          </button>
-        </div>
-
         {/* Form */}
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-          {/* Email or Phone */}
-          {useEmail ? (
-            <input
-              type="email"
-              name="email"
-              placeholder="Email Address"
-              value={formData.email}
-              onChange={handleChange}
-              disabled={isLoading}
-              className="p-3 border rounded-lg 
-                         bg-white dark:bg-gray-700 
-                         text-gray-700 dark:text-gray-200 
-                         placeholder:text-gray-500 dark:placeholder:text-gray-400
-                         border-gray-300 dark:border-gray-600
-                         focus:outline-orange-500 focus:ring-2 focus:ring-orange-500 
-                         transition-all duration-300
-                         disabled:opacity-50 disabled:cursor-not-allowed"
-              required
-            />
-          ) : (
-            <PhoneInput
-              country={"us"}
-              value={formData.phone}
-              onChange={handlePhoneChange}
-              disabled={isLoading}
-              inputStyle={{
-                width: "100%",
-                height: "45px",
-                borderRadius: "8px",
-                backgroundColor: "inherit",
-                color: "inherit",
-                border: "1px solid #d1d5db",
-                opacity: isLoading ? 0.5 : 1,
-              }}
-              containerClass="dark:text-gray-200"
-              inputClass="dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600"
-            />
-          )}
+          {/* Phone Number */}
+          <PhoneInput
+            country={"us"}
+            value={formData.phone}
+            onChange={handlePhoneChange}
+            disabled={isLoading}
+            inputStyle={{
+              width: "100%",
+              height: "45px",
+              borderRadius: "8px",
+              backgroundColor: "inherit",
+              color: "inherit",
+              border: "1px solid #d1d5db",
+              opacity: isLoading ? 0.5 : 1,
+            }}
+            containerClass="dark:text-gray-200"
+            inputClass="dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600"
+          />
 
           {/* Password */}
           <input

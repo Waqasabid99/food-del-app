@@ -159,6 +159,20 @@ const Navbar = ({ handleShowLogin }) => {
             >
               Contact
             </NavLink>
+            {isAuthenticated && (
+              <NavLink
+              to="/dashboard"
+              className={({ isActive }) =>
+                `relative px-1 ${
+                  isActive
+                    ? "text-orange-400 dark:text-orange-300"
+                    : "text-black dark:text-gray-200"
+                } after:content-[''] after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-0 after:bg-orange-400 dark:after:bg-orange-300 after:transition-all after:duration-300 hover:after:w-full hover:text-orange-400 dark:hover:text-orange-300 transition-colors duration-300`
+              }
+            >
+              Dashboard
+            </NavLink>
+            )}
           </nav>
         </div>
 
@@ -413,6 +427,21 @@ const Navbar = ({ handleShowLogin }) => {
             >
               Contact
             </NavLink>
+            {isAuthenticated && (
+              <NavLink
+              to="/dashboard"
+              onClick={closeMobileMenu}
+              className={({ isActive }) =>
+                `py-3 px-2 text-lg border-b border-gray-100 dark:border-gray-700 ${
+                  isActive
+                    ? "text-orange-400 dark:text-orange-300 font-semibold"
+                    : "text-black dark:text-gray-200"
+                } hover:text-orange-400 dark:hover:text-orange-300 transition-colors duration-300`
+              }
+            >
+              Dashboard
+            </NavLink>
+            )}
 
             {/* Mobile Sign-in Button */}
             {isAuthenticated && (

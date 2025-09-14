@@ -1,4 +1,6 @@
 // stores/authStore.js
+import axios from 'axios';
+import { toast } from 'react-toastify';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
@@ -19,18 +21,13 @@ const useAuthStore = create(
         set({ isLoading: true, error: null });
         
         try {
-          const response = await fetch(`${API_BASE_URL}/user/login`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(credentials),
-          });
+          const response = await axios.post(`${API_BASE_URL}/user/login`, credentials, {withCredentials: true});
+          const data = await response.data;
 
-          const data = await response.json();
-
-          if (!response.ok) {
-            throw new Error(data.message || 'Login failed');
+          if(response.status === 200 || response.status === 201){
+            toast.success(data.message);
+          } else {
+            toast.error(data.message)
           }
 
           // Store user data and token
@@ -42,7 +39,7 @@ const useAuthStore = create(
             error: null,
           });
 
-          return { success: true, message: data.message };
+          return { status: 200, message: data.message };
         } catch (error) {
           set({
             user: null,
@@ -52,7 +49,7 @@ const useAuthStore = create(
             error: error.message,
           });
           
-          return { success: false, message: error.message };
+          return { status: 400, message: error.message };
         }
       },
 
@@ -60,18 +57,13 @@ const useAuthStore = create(
         set({ isLoading: true, error: null });
         
         try {
-          const response = await fetch(`${API_BASE_URL}/user/register`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(userData),
-          });
+          const response = await axios.post(`${API_BASE_URL}/user/register`, userData, {withCredentials:true});
+          const data = await response.data;
 
-          const data = await response.json();
-
-          if (!response.ok) {
-            throw new Error(data.message || 'Registration failed');
+          if(response.status === 200 || response.status === 201){
+            toast.success(data.message);
+          } else {
+            toast.error(data.message)
           }
 
           // Store user data and token after successful registration
@@ -83,7 +75,7 @@ const useAuthStore = create(
             error: null,
           });
 
-          return { success: true, message: data.message };
+          return { status: 200, message: data.message };
         } catch (error) {
           set({
             user: null,
@@ -93,7 +85,7 @@ const useAuthStore = create(
             error: error.message,
           });
           
-          return { success: false, message: error.message };
+          return { status: 400, message: error.message };
         }
       },
 

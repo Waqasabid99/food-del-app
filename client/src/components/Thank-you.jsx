@@ -54,7 +54,7 @@ const ThankYou = ({ handleShowLogin }) => {
   };
 
   const handleContinueShopping = () => {
-    navigate('/');
+    navigate('/shop');
   };
 
   const handleViewOrders = () => {

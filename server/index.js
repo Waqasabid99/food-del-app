@@ -10,12 +10,13 @@ const menuRouter = require("./routes/menu.routes");
 const path = require("path");
 const userRouter = require("./routes/user.routes");
 const orderRouter = require("./routes/order.routes");
+const adminRouter = require("./routes/admin.routes");
 //Middleware
 app.use(express.json())
 app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: true }))
 app.use(cors({
-   origin: ["http://localhost:5173", "http://localhost:3000"],
+   origin: ["http://localhost:5173", "http://localhost:3000", "http://localhost:5174"],
    credentials: true
 }))
 
@@ -31,6 +32,7 @@ app.use("/api/food", foodRouter)
 app.use("/api/menu", menuRouter)
 app.use("/api/order", orderRouter)
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+app.use("/api/admin", adminRouter)
 
 
 app.listen(PORT, () => {

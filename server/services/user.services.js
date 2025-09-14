@@ -12,15 +12,13 @@ const createToken = (userId) => {
 };
 
 const createUser = async (req, res) => {
-  const { name, email, phone, password } = req.body;
+  const { name, phone, password } = req.body;
   try {
-    // Check if user exists by email or phone
-    const exists = await userModel.findOne({
-      $or: [{ email }, { phone }],
-    });
+    // Check if user exists by phone
+    const exists = await userModel.findOne({ phone });
 
     if (exists) {
-      return res.status(400).json({ message: "User already exists" });
+      return res.status(400).json({ message: "User with this phone number already exists" });
     }
 
     // Hash password
@@ -29,7 +27,6 @@ const createUser = async (req, res) => {
     // Create new user
     const user = await userModel.create({
       name,
-      email,
       phone,
       password: hashedPassword,
     });
@@ -46,18 +43,18 @@ const createUser = async (req, res) => {
 
 const loginUser = async (req, res) => {
   try {
-    const { email, phone, password } = req.body;
+    const { phone, password } = req.body;
 
-    // Find user by email OR phone
-    const user = await userModel.findOne({ $or: [{ email }, { phone }] });
+    // Find user by phone
+    const user = await userModel.findOne({ phone });
     if (!user) {
-      return res.status(401).json({ message: "Invalid email/phone or password" });
+      return res.status(401).json({ message: "Invalid phone number or password" });
     }
 
     // Validate password
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
-      return res.status(401).json({ message: "Invalid email/phone or password" });
+      return res.status(401).json({ message: "Invalid phone number or password" });
     }
 
     const token = createToken(user._id);
@@ -106,18 +103,6 @@ const updateUser = async (req, res) => {
       
       if (existingUser) {
         return res.status(400).json({ message: "Phone number already in use" });
-      }
-    }
-
-    // If email is being updated, check if it's already taken by another user
-    if (updateData.email) {
-      const existingUser = await userModel.findOne({ 
-        email: updateData.email, 
-        _id: { $ne: userId } 
-      });
-      
-      if (existingUser) {
-        return res.status(400).json({ message: "Email already in use" });
       }
     }
 

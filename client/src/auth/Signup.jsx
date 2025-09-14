@@ -1,35 +1,37 @@
 import React, { useState, useEffect } from "react";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import useAuth from "@/context/useAuth";
+import axios from "axios";
+import { ToastContainer } from "react-toastify";
 
 const Signup = ({ handleShowSignup, handleShowLogin }) => {
-  const [useEmail, setUseEmail] = useState(true);
   const [formData, setFormData] = useState({
-    email: "",
     phone: "",
     name: "",
     password: "",
   });
   const [confirmPassword, setConfirmPassword] = useState("");
   const [validationErrors, setValidationErrors] = useState({});
+  const baseUrl = import.meta.env.VITE_BACKEND_BASE_URL || "http://localhost:5000";
+  const navigate = useNavigate()
 
   // Get auth functions and state from the store
   const { register, isLoading, error, clearError, isAuthenticated } = useAuth();
 
-  // Clear errors when component mounts or when switching between email/phone
+  // Clear errors when component mounts
   useEffect(() => {
     clearError();
     setValidationErrors({});
-  }, [useEmail, clearError]);
+  }, [clearError]);
 
   // Redirect if already authenticated
-  useEffect(() => {
-    if (isAuthenticated) {
-      handleShowSignup(false);
-    }
-  }, [isAuthenticated, handleShowSignup]);
+  // useEffect(() => {
+  //   if (isAuthenticated) {
+  //     handleShowSignup(false);
+  //   }
+  // }, [isAuthenticated, handleShowSignup]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -84,17 +86,9 @@ const Signup = ({ handleShowSignup, handleShowLogin }) => {
       errors.name = "Username must be at least 2 characters";
     }
 
-    // Validate email or phone
-    if (useEmail) {
-      if (!formData.email.trim()) {
-        errors.email = "Email is required";
-      } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-        errors.email = "Please enter a valid email address";
-      }
-    } else {
-      if (!formData.phone || formData.phone.length < 10) {
-        errors.phone = "Please enter a valid phone number";
-      }
+    // Validate phone
+    if (!formData.phone || formData.phone.length < 10) {
+      errors.phone = "Please enter a valid phone number";
     }
 
     // Validate password
@@ -129,29 +123,23 @@ const Signup = ({ handleShowSignup, handleShowLogin }) => {
     // Prepare registration data
     const registrationData = {
       name: formData.name.trim(),
+      phone: formData.phone,
       password: formData.password,
     };
-
-    // Add email or phone based on selection
-    if (useEmail) {
-      registrationData.email = formData.email.trim().toLowerCase();
-    } else {
-      registrationData.phone = formData.phone;
-    }
 
     try {
       // Call register function from auth store
       const result = await register(registrationData);
-
-      if (result.success) {
+      console.log(result)
+      if (result.status === 200) {
         // Registration successful - user is now logged in automatically
         console.log("Registration successful:", result.message);
         
         // Close the signup modal
-        handleShowSignup(false);
+        setTimeout(() => {
+          handleShowSignup(false);
+        }, 1000)
         
-        // You might want to show a success message here
-        // or redirect to a welcome page
       } else {
         // Registration failed
         console.error("Registration failed:", result.message);
@@ -166,8 +154,9 @@ const Signup = ({ handleShowSignup, handleShowLogin }) => {
   };
 
   return (
-    <div className="w-full flex justify-center py-10 bg-white dark:bg-gray-900 transition-colors duration-300">
-      <div className="relative w-[400px] bg-white dark:bg-gray-800 shadow-lg dark:shadow-2xl rounded-2xl p-6 transition-all duration-300 border-0 dark:border dark:border-gray-600">
+    <div className="w-full flex h-screen items-center justify-center py-10 bg-white dark:bg-gray-900 transition-colors duration-300">
+      <ToastContainer />
+      <div className="relative max-h-fit w-[400px] bg-white dark:bg-gray-800 shadow-lg dark:shadow-2xl rounded-2xl p-6 transition-all duration-300 border-0 dark:border dark:border-gray-600">
         <button
           onClick={() => handleShowSignup(false)}
           className="absolute top-4 right-4 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors duration-300"
@@ -200,80 +189,29 @@ const Signup = ({ handleShowSignup, handleShowLogin }) => {
           </div>
         )}
 
-        {/* Switch Option */}
-        <div className="flex justify-center mb-4 gap-3">
-          <button
-            type="button"
-            onClick={() => setUseEmail(true)}
-            className={`px-4 py-2 rounded-lg transition-all duration-300 ${
-              useEmail 
-                ? "bg-orange-500 text-white" 
-                : "bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200"
-            }`}
-          >
-            Use Email
-          </button>
-          <button
-            type="button"
-            onClick={() => setUseEmail(false)}
-            className={`px-4 py-2 rounded-lg transition-all duration-300 ${
-              !useEmail 
-                ? "bg-orange-500 text-white" 
-                : "bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200"
-            }`}
-          >
-            Use Phone
-          </button>
-        </div>
-
         {/* Form */}
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-          {/* Email or Phone */}
-          {useEmail ? (
-            <div>
-              <input
-                type="email"
-                name="email"
-                placeholder="Email Address"
-                value={formData.email}
-                onChange={handleChange}
-                className={`w-full p-3 border rounded-lg 
-                           bg-white dark:bg-gray-700 
-                           text-gray-700 dark:text-gray-200 
-                           placeholder:text-gray-500 dark:placeholder:text-gray-400
-                           transition-all duration-300
-                           ${getFieldError('email') 
-                             ? 'border-red-500 focus:outline-red-500 focus:ring-2 focus:ring-red-500' 
-                             : 'border-gray-300 dark:border-gray-600 focus:outline-orange-500 focus:ring-2 focus:ring-orange-500'
-                           }`}
-                required
-              />
-              {getFieldError('email') && (
-                <p className="text-red-500 text-sm mt-1">{getFieldError('email')}</p>
-              )}
-            </div>
-          ) : (
-            <div>
-              <PhoneInput
-                country={"us"}
-                value={formData.phone}
-                onChange={handlePhoneChange}
-                inputStyle={{
-                  width: "100%",
-                  height: "45px",
-                  borderRadius: "8px",
-                  backgroundColor: "inherit",
-                  color: "inherit",
-                  border: getFieldError('phone') ? "1px solid #ef4444" : "1px solid #d1d5db",
-                }}
-                containerClass="dark:text-gray-200"
-                inputClass="dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600"
-              />
-              {getFieldError('phone') && (
-                <p className="text-red-500 text-sm mt-1">{getFieldError('phone')}</p>
-              )}
-            </div>
-          )}
+          {/* Phone Number */}
+          <div>
+            <PhoneInput
+              country={"us"}
+              value={formData.phone}
+              onChange={handlePhoneChange}
+              inputStyle={{
+                width: "100%",
+                height: "45px",
+                borderRadius: "8px",
+                backgroundColor: "inherit",
+                color: "inherit",
+                border: getFieldError('phone') ? "1px solid #ef4444" : "1px solid #d1d5db",
+              }}
+              containerClass="dark:text-gray-200"
+              inputClass="dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600"
+            />
+            {getFieldError('phone') && (
+              <p className="text-red-500 text-sm mt-1">{getFieldError('phone')}</p>
+            )}
+          </div>
 
           {/* Username */}
           <div>
