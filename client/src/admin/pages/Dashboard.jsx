@@ -1,80 +1,176 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { IoMdAdd } from "react-icons/io";
 import { MdRestaurantMenu } from "react-icons/md";
 import AdminNavbar from "../components/AdminNavbar";
 import AdminSidebar from "../components/AdminSidebar";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import useAdminAuthStore from "@/store/authStore";
 import Orders from "../components/Orders";
 
 const Dashboard = () => {
   const [activeTab, setActiveTab] = useState("dashboard");
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [dashboardStats, setDashboardStats] = useState({
+    totalOrders: 0,
+    todaysOrders: 0,
+    totalProducts: 0,
+    totalRevenue: 0,
+    pendingOrders: 0,
+    completedOrders: 0,
+  });
+  const [recentOrders, setRecentOrders] = useState([]);
   const navigate = useNavigate();
   const { admin, logout } = useAdminAuthStore();
-  console.log(admin)
-  // Mock data for dashboard stats
-  const dashboardStats = {
-    totalOrders: 245,
-    todaysOrders: 23,
-    totalProducts: 156,
-    totalRevenue: 12450.5,
-    pendingOrders: 8,
-    completedOrders: 237,
+
+  // API base URL - adjust this to match your backend URL
+  const API_BASE_URL = import.meta.env.VITE_BACKEND_BASE_URL || 'http://localhost:5000/api';
+
+  // Fetch dashboard data
+  const fetchDashboardData = async () => {
+    try {
+      setLoading(true);
+      
+      // Fetch all orders
+      const ordersResponse = await fetch(`${API_BASE_URL}/order/admin/all?limit=50`);
+      const ordersData = await ordersResponse.json();
+      
+      // Fetch all products
+      const productsResponse = await fetch(`${API_BASE_URL}/food/getfood`);
+      const productsData = await productsResponse.json();
+      
+      // Fetch all users
+      const usersResponse = await fetch(`${API_BASE_URL}/user/getall`);
+      const usersData = await usersResponse.json();
+
+      if (ordersData && productsData && usersData) {
+        const orders = ordersData.orders || [];
+        const products = productsData.data || [];
+        const users = usersData.users || [];
+
+        // Calculate today's date
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        const tomorrow = new Date(today);
+        tomorrow.setDate(tomorrow.getDate() + 1);
+
+        // Filter today's orders
+        const todaysOrders = orders.filter(order => {
+          const orderDate = new Date(order.createdAt);
+          return orderDate >= today && orderDate < tomorrow;
+        });
+
+        // Calculate stats
+        const totalRevenue = orders
+          .filter(order => order.status === 'delivered')
+          .reduce((sum, order) => sum + (order.pricing?.total || 0), 0);
+
+        const pendingOrders = orders.filter(order => 
+          ['pending', 'confirmed', 'preparing', 'out_for_delivery'].includes(order.status)
+        ).length;
+
+        const completedOrders = orders.filter(order => 
+          order.status === 'delivered'
+        ).length;
+
+        // Update dashboard stats
+        setDashboardStats({
+          totalOrders: orders.length,
+          todaysOrders: todaysOrders.length,
+          totalProducts: products.length,
+          totalRevenue: totalRevenue,
+          pendingOrders: pendingOrders,
+          completedOrders: completedOrders,
+        });
+
+        // Set recent orders (last 5 orders)
+        const formattedRecentOrders = orders.slice(0, 5).map(order => ({
+          id: order.orderNumber || `#${order._id.slice(-6).toUpperCase()}`,
+          customer: order.userId?.name || 'Unknown Customer',
+          amount: `$${(order.pricing?.total || 0).toFixed(2)}`,
+          status: getDisplayStatus(order.status),
+          time: getTimeAgo(order.createdAt),
+          rawStatus: order.status
+        }));
+
+        setRecentOrders(formattedRecentOrders);
+      }
+    } catch (error) {
+      console.error('Error fetching dashboard data:', error);
+      // Keep default values if fetch fails
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const recentOrders = [
-    {
-      id: "#ORD001",
-      customer: "John Doe",
-      amount: "$24.99",
-      status: "Delivered",
-      time: "2 hours ago",
-    },
-    {
-      id: "#ORD002",
-      customer: "Jane Smith",
-      amount: "$18.50",
-      status: "Preparing",
-      time: "30 mins ago",
-    },
-    {
-      id: "#ORD003",
-      customer: "Mike Johnson",
-      amount: "$32.75",
-      status: "On the way",
-      time: "15 mins ago",
-    },
-    {
-      id: "#ORD004",
-      customer: "Sarah Wilson",
-      amount: "$27.25",
-      status: "Pending",
-      time: "5 mins ago",
-    },
-    {
-      id: "#ORD005",
-      customer: "David Brown",
-      amount: "$19.99",
-      status: "Delivered",
-      time: "3 hours ago",
-    },
-  ];
+  // Helper function to format order status for display
+  const getDisplayStatus = (status) => {
+    const statusMap = {
+      'pending': 'Pending',
+      'confirmed': 'Confirmed',
+      'preparing': 'Preparing',
+      'out_for_delivery': 'On the way',
+      'delivered': 'Delivered',
+      'cancelled': 'Cancelled'
+    };
+    return statusMap[status] || status;
+  };
+
+  // Helper function to calculate time ago
+  const getTimeAgo = (dateString) => {
+    const now = new Date();
+    const orderDate = new Date(dateString);
+    const diffInMinutes = Math.floor((now - orderDate) / (1000 * 60));
+    
+    if (diffInMinutes < 1) return 'Just now';
+    if (diffInMinutes < 60) return `${diffInMinutes} mins ago`;
+    
+    const diffInHours = Math.floor(diffInMinutes / 60);
+    if (diffInHours < 24) return `${diffInHours} hour${diffInHours > 1 ? 's' : ''} ago`;
+    
+    const diffInDays = Math.floor(diffInHours / 24);
+    return `${diffInDays} day${diffInDays > 1 ? 's' : ''} ago`;
+  };
 
   const getStatusColor = (status) => {
-    switch (status) {
-      case "Delivered":
+    switch (status.toLowerCase()) {
+      case "delivered":
         return "bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200";
-      case "Preparing":
+      case "preparing":
         return "bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200";
-      case "On the way":
+      case "on the way":
         return "bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200";
-      case "Pending":
+      case "pending":
+      case "confirmed":
         return "bg-orange-100 dark:bg-orange-900 text-orange-800 dark:text-orange-200";
+      case "cancelled":
+        return "bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200";
       default:
         return "bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200";
     }
   };
+
+  // Fetch data on component mount
+  useEffect(() => {
+    fetchDashboardData();
+    
+    // Set up polling to refresh data every 30 seconds
+    const interval = setInterval(fetchDashboardData, 30000);
+    
+    return () => clearInterval(interval);
+  }, []);
+
+  // Loading state
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500 mx-auto mb-4"></div>
+          <p className="text-gray-600 dark:text-gray-300">Loading dashboard data...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -99,13 +195,24 @@ const Dashboard = () => {
               <div>
                 {/* Dashboard Header */}
                 <div className="mb-8">
-                  <h2 className="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-2 transition-colors duration-300">
-                    Dashboard
-                  </h2>
-                  <p className="text-gray-600 dark:text-gray-300 transition-colors duration-300">
-                    Welcome back! Here's what's happening with your restaurant
-                    today.
-                  </p>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h2 className="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-2 transition-colors duration-300">
+                        Dashboard
+                      </h2>
+                      <p className="text-gray-600 dark:text-gray-300 transition-colors duration-300">
+                        Welcome back! Here's what's happening with your restaurant today.
+                      </p>
+                    </div>
+                    <button
+                      onClick={fetchDashboardData}
+                      className="px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors duration-300 flex items-center gap-2"
+                      disabled={loading}
+                    >
+                      <span className={loading ? 'animate-spin' : ''}>🔄</span>
+                      Refresh
+                    </button>
+                  </div>
                 </div>
 
                 {/* Stats Cards */}
@@ -117,8 +224,8 @@ const Dashboard = () => {
                         <p className="text-2xl font-bold text-gray-800 dark:text-gray-100 transition-colors duration-300">
                           {dashboardStats.totalOrders}
                         </p>
-                        <p className="text-xs text-green-600 dark:text-green-400 mt-1 transition-colors duration-300">
-                          ↗️ +12% from last month
+                        <p className="text-xs text-blue-600 dark:text-blue-400 mt-1 transition-colors duration-300">
+                          All time orders
                         </p>
                       </div>
                       <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center transition-colors duration-300">
@@ -137,7 +244,7 @@ const Dashboard = () => {
                           {dashboardStats.todaysOrders}
                         </p>
                         <p className="text-xs text-green-600 dark:text-green-400 mt-1 transition-colors duration-300">
-                          ↗️ +5 from yesterday
+                          Orders placed today
                         </p>
                       </div>
                       <div className="w-12 h-12 bg-green-100 dark:bg-green-900 rounded-lg flex items-center justify-center transition-colors duration-300">
@@ -155,7 +262,9 @@ const Dashboard = () => {
                         <p className="text-2xl font-bold text-gray-800 dark:text-gray-100 transition-colors duration-300">
                           {dashboardStats.totalProducts}
                         </p>
-                        <p className="text-xs text-blue-600 dark:text-blue-400 mt-1 transition-colors duration-300">3 categories</p>
+                        <p className="text-xs text-blue-600 dark:text-blue-400 mt-1 transition-colors duration-300">
+                          Available items
+                        </p>
                       </div>
                       <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900 rounded-lg flex items-center justify-center transition-colors duration-300">
                         <span className="text-purple-600 dark:text-purple-300 text-xl">🍕</span>
@@ -173,7 +282,7 @@ const Dashboard = () => {
                           ${dashboardStats.totalRevenue.toFixed(2)}
                         </p>
                         <p className="text-xs text-green-600 dark:text-green-400 mt-1 transition-colors duration-300">
-                          ↗️ +8% from last month
+                          From delivered orders
                         </p>
                       </div>
                       <div className="w-12 h-12 bg-orange-100 dark:bg-orange-900 rounded-lg flex items-center justify-center transition-colors duration-300">
@@ -195,63 +304,72 @@ const Dashboard = () => {
                           <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100 transition-colors duration-300">
                             Recent Orders
                           </h3>
-                          <button className="text-orange-500 dark:text-orange-400 text-sm hover:text-orange-600 dark:hover:text-orange-300 transition-colors duration-300">
+                          <button 
+                            onClick={() => setActiveTab("orders")}
+                            className="text-orange-500 dark:text-orange-400 text-sm hover:text-orange-600 dark:hover:text-orange-300 transition-colors duration-300"
+                          >
                             View All
                           </button>
                         </div>
                       </div>
                       <div className="overflow-x-auto">
-                        <table className="w-full">
-                          <thead className="bg-gray-50 dark:bg-gray-700 transition-colors duration-300">
-                            <tr>
-                              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase transition-colors duration-300">
-                                Order ID
-                              </th>
-                              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase transition-colors duration-300">
-                                Customer
-                              </th>
-                              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase transition-colors duration-300">
-                                Amount
-                              </th>
-                              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase transition-colors duration-300">
-                                Status
-                              </th>
-                              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase transition-colors duration-300">
-                                Time
-                              </th>
-                            </tr>
-                          </thead>
-                          <tbody className="divide-y divide-gray-200 dark:divide-gray-700 transition-colors duration-300">
-                            {recentOrders.map((order) => (
-                              <tr
-                                key={order.id}
-                                className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-300"
-                              >
-                                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 dark:text-gray-100 transition-colors duration-300">
-                                  {order.id}
-                                </td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-300 transition-colors duration-300">
-                                  {order.customer}
-                                </td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 dark:text-gray-100 transition-colors duration-300">
-                                  {order.amount}
-                                </td>
-                                <td className="px-6 py-4 whitespace-nowrap">
-                                  <span
-                                    className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(
-                                      order.status
-                                    )} transition-colors duration-300`}
-                                  >
-                                    {order.status}
-                                  </span>
-                                </td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400 transition-colors duration-300">
-                                  {order.time}
-                                </td>
+                        {recentOrders.length > 0 ? (
+                          <table className="w-full">
+                            <thead className="bg-gray-50 dark:bg-gray-700 transition-colors duration-300">
+                              <tr>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase transition-colors duration-300">
+                                  Order ID
+                                </th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase transition-colors duration-300">
+                                  Customer
+                                </th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase transition-colors duration-300">
+                                  Amount
+                                </th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase transition-colors duration-300">
+                                  Status
+                                </th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase transition-colors duration-300">
+                                  Time
+                                </th>
                               </tr>
-                            ))}
-                          </tbody>
-                        </table>
+                            </thead>
+                            <tbody className="divide-y divide-gray-200 dark:divide-gray-700 transition-colors duration-300">
+                              {recentOrders.map((order, index) => (
+                                <tr
+                                  key={`${order.id}-${index}`}
+                                  className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-300"
+                                >
+                                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 dark:text-gray-100 transition-colors duration-300">
+                                    {order.id}
+                                  </td>
+                                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-300 transition-colors duration-300">
+                                    {order.customer}
+                                  </td>
+                                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 dark:text-gray-100 transition-colors duration-300">
+                                    {order.amount}
+                                  </td>
+                                  <td className="px-6 py-4 whitespace-nowrap">
+                                    <span
+                                      className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(
+                                        order.status
+                                      )} transition-colors duration-300`}
+                                    >
+                                      {order.status}
+                                    </span>
+                                  </td>
+                                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400 transition-colors duration-300">
+                                    {order.time}
+                                  </td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        ) : (
+                          <div className="text-center py-8">
+                            <p className="text-gray-500 dark:text-gray-400">No orders found</p>
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -262,24 +380,24 @@ const Dashboard = () => {
                       Quick Actions
                     </h3>
                     <div className="space-y-3">
-                      <button
-                        onClick={() => navigate("/admin/add-product")}
+                      <Link 
+                        to="/admin/add-product"
                         className="w-full bg-orange-500 dark:bg-orange-600 text-white py-3 px-4 rounded-lg text-sm font-medium hover:bg-orange-600 dark:hover:bg-orange-700 transition-colors duration-300 flex items-center gap-2"
                       >
-                        <span><IoMdAdd /> </span> Add New Product
-                      </button>
-                      <button
-                        onClick={() => navigate("/admin/add-menu")}
+                        <IoMdAdd /> Add New Product
+                      </Link>
+                      <Link
+                        to="/admin/add-menu"
                         className="w-full bg-blue-500 dark:bg-blue-600 text-white py-3 px-4 rounded-lg text-sm font-medium hover:bg-blue-600 dark:hover:bg-blue-700 transition-colors duration-300 flex items-center gap-2"
                       >
-                        <span><MdRestaurantMenu /></span> Add Menu Item
-                      </button>
-                      <button
-                        onClick={() => setActiveTab("orders")}
+                        <MdRestaurantMenu /> Add Menu Item
+                      </Link>
+                      <Link
+                      to='/admin/orders'
                         className="w-full border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-700 py-3 px-4 rounded-lg text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors duration-300 flex items-center gap-2"
                       >
                         <span>👁️</span> View All Orders
-                      </button>
+                      </Link>
                     </div>
 
                     {/* Quick Stats */}
@@ -295,10 +413,17 @@ const Dashboard = () => {
                           </span>
                         </div>
                         <div className="flex justify-between text-sm">
-                          <span className="text-gray-600 dark:text-gray-300 transition-colors duration-300">Completed Today</span>
+                          <span className="text-gray-600 dark:text-gray-300 transition-colors duration-300">Completed Orders</span>
                           <span className="font-medium text-green-600 dark:text-green-400 transition-colors duration-300">
-                            {dashboardStats.todaysOrders -
-                              dashboardStats.pendingOrders}
+                            {dashboardStats.completedOrders}
+                          </span>
+                        </div>
+                        <div className="flex justify-between text-sm">
+                          <span className="text-gray-600 dark:text-gray-300 transition-colors duration-300">Success Rate</span>
+                          <span className="font-medium text-blue-600 dark:text-blue-400 transition-colors duration-300">
+                            {dashboardStats.totalOrders > 0 
+                              ? Math.round((dashboardStats.completedOrders / dashboardStats.totalOrders) * 100)
+                              : 0}%
                           </span>
                         </div>
                       </div>
@@ -309,30 +434,7 @@ const Dashboard = () => {
             )}
 
             {/* Other tabs content */}
-            {activeTab === "orders" && (
-              <Orders />
-              // <div>
-              //   <div className="mb-8">
-              //     <h2 className="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-2 transition-colors duration-300">
-              //       Orders Management
-              //     </h2>
-              //     <p className="text-gray-600 dark:text-gray-300 transition-colors duration-300">
-              //       Manage and track all customer orders.
-              //     </p>
-              //   </div>
-              //   <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-2xl border border-gray-200 dark:border-gray-700 p-6 transition-colors duration-300">
-              //     <div className="text-center py-12">
-              //       <span className="text-6xl mb-4 block">📦</span>
-              //       <h3 className="text-lg font-medium text-gray-800 dark:text-gray-100 mb-2 transition-colors duration-300">
-              //         Orders Management
-              //       </h3>
-              //       <p className="text-gray-600 dark:text-gray-300 transition-colors duration-300">
-              //         Full orders management interface will be implemented here.
-              //       </p>
-              //     </div>
-              //   </div>
-              // </div>
-            )}
+            {activeTab === "orders" && <Orders />}
 
             {activeTab === "customers" && (
               <div>
