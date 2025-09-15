@@ -164,24 +164,24 @@ const Customers = () => {
 
     return (
       <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-        <div className="bg-white dark:bg-gray-800 rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl">
-          <div className="p-8">
+        <div className="bg-white dark:bg-gray-800 rounded-xl sm:rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl">
+          <div className="p-4 sm:p-6 lg:p-8">
             {/* Modal Header */}
-            <div className="flex justify-between items-center mb-8">
-              <div>
-                <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 sm:mb-8">
+              <div className="min-w-0 flex-1">
+                <h2 className="text-xl sm:text-2xl font-bold text-gray-800 dark:text-gray-100">
                   Customer Details
                 </h2>
-                <p className="text-gray-600 dark:text-gray-400 mt-1">
+                <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 mt-1 leading-relaxed">
                   View customer information and activity
                 </p>
               </div>
               <button
                 onClick={() => setShowCustomerModal(false)}
-                className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors flex-shrink-0"
               >
                 <svg
-                  className="w-6 h-6"
+                  className="w-5 h-5 sm:w-6 sm:h-6"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -197,42 +197,42 @@ const Customers = () => {
             </div>
 
             {/* Customer Information */}
-            <div className="space-y-6">
-              <div className="bg-gray-50 dark:bg-gray-700 rounded-xl p-6">
-                <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-4">
+            <div className="space-y-4 sm:space-y-6">
+              <div className="bg-gray-50 dark:bg-gray-700 rounded-lg sm:rounded-xl p-4 sm:p-6">
+                <h3 className="text-base sm:text-lg font-semibold text-gray-800 dark:text-gray-100 mb-3 sm:mb-4">
                   Personal Information
                 </h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                   <div className="flex items-center space-x-3">
-                    <MdPerson className="w-5 h-5 text-gray-500 dark:text-gray-400" />
-                    <div>
-                      <p className="text-sm text-gray-600 dark:text-gray-400">
+                    <MdPerson className="w-4 h-4 sm:w-5 sm:h-5 text-gray-500 dark:text-gray-400 flex-shrink-0" />
+                    <div className="min-w-0 flex-1">
+                      <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
                         Name
                       </p>
-                      <p className="font-medium text-gray-800 dark:text-gray-100">
+                      <p className="font-medium text-sm sm:text-base text-gray-800 dark:text-gray-100 break-words">
                         {selectedCustomer.name || "N/A"}
                       </p>
                     </div>
                   </div>
                   <div className="flex items-center space-x-3">
-                    <MdPhone className="w-5 h-5 text-gray-500 dark:text-gray-400" />
-                    <div>
-                      <p className="text-sm text-gray-600 dark:text-gray-400">
+                    <MdPhone className="w-4 h-4 sm:w-5 sm:h-5 text-gray-500 dark:text-gray-400 flex-shrink-0" />
+                    <div className="min-w-0 flex-1">
+                      <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
                         Phone
                       </p>
-                      <p className="font-medium text-gray-800 dark:text-gray-100">
+                      <p className="font-medium text-sm sm:text-base text-gray-800 dark:text-gray-100 break-all">
                         {selectedCustomer.phone || "N/A"}
                       </p>
                     </div>
                   </div>
                   {selectedCustomer.email && (
-                    <div className="flex items-center space-x-3">
-                      <MdEmail className="w-5 h-5 text-gray-500 dark:text-gray-400" />
-                      <div>
-                        <p className="text-sm text-gray-600 dark:text-gray-400">
+                    <div className="flex items-center space-x-3 sm:col-span-2">
+                      <MdEmail className="w-4 h-4 sm:w-5 sm:h-5 text-gray-500 dark:text-gray-400 flex-shrink-0" />
+                      <div className="min-w-0 flex-1">
+                        <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
                           Email
                         </p>
-                        <p className="font-medium text-gray-800 dark:text-gray-100">
+                        <p className="font-medium text-sm sm:text-base text-gray-800 dark:text-gray-100 break-all">
                           {selectedCustomer.email}
                         </p>
                       </div>
@@ -241,33 +241,33 @@ const Customers = () => {
                 </div>
               </div>
 
-              <div className="bg-gray-50 dark:bg-gray-700 rounded-xl p-6">
-                <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-4">
+              <div className="bg-gray-50 dark:bg-gray-700 rounded-lg sm:rounded-xl p-4 sm:p-6">
+                <h3 className="text-base sm:text-lg font-semibold text-gray-800 dark:text-gray-100 mb-3 sm:mb-4">
                   Account Information
                 </h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                   <div>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                    <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
                       Customer ID
                     </p>
-                    <p className="font-medium text-gray-800 dark:text-gray-100 font-mono text-sm">
+                    <p className="font-medium text-sm sm:text-base text-gray-800 dark:text-gray-100 font-mono break-all">
                       {selectedCustomer._id}
                     </p>
                   </div>
                   <div>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                    <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
                       Member Since
                     </p>
-                    <p className="font-medium text-gray-800 dark:text-gray-100">
+                    <p className="font-medium text-sm sm:text-base text-gray-800 dark:text-gray-100">
                       {formatDate(selectedCustomer.createdAt)}
                     </p>
                   </div>
                   {selectedCustomer.updatedAt && (
-                    <div>
-                      <p className="text-sm text-gray-600 dark:text-gray-400">
+                    <div className="sm:col-span-2">
+                      <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
                         Last Updated
                       </p>
-                      <p className="font-medium text-gray-800 dark:text-gray-100">
+                      <p className="font-medium text-sm sm:text-base text-gray-800 dark:text-gray-100">
                         {formatDate(selectedCustomer.updatedAt)}
                       </p>
                     </div>
@@ -277,10 +277,10 @@ const Customers = () => {
             </div>
 
             {/* Actions */}
-            <div className="flex gap-4 mt-8">
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-6 sm:mt-8">
               <button
                 onClick={() => setShowCustomerModal(false)}
-                className="flex-1 px-6 py-3 bg-gray-600 dark:bg-gray-700 text-white rounded-lg font-medium hover:bg-gray-700 dark:hover:bg-gray-600 transition-colors duration-300"
+                className="w-full sm:flex-1 px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-base bg-gray-600 dark:bg-gray-700 text-white rounded-lg font-medium hover:bg-gray-700 dark:hover:bg-gray-600 transition-colors duration-300"
               >
                 Close
               </button>
@@ -291,7 +291,7 @@ const Customers = () => {
                     selectedCustomer.name
                   )
                 }
-                className="px-6 py-3 bg-red-500 dark:bg-red-600 text-white rounded-lg font-medium hover:bg-red-600 dark:hover:bg-red-700 transition-colors duration-300"
+                className="w-full sm:w-auto px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-base bg-red-500 dark:bg-red-600 text-white rounded-lg font-medium hover:bg-red-600 dark:hover:bg-red-700 transition-colors duration-300"
               >
                 Delete Customer
               </button>
@@ -317,26 +317,26 @@ const Customers = () => {
 
     return (
       <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-        <div className="bg-white dark:bg-gray-800 rounded-2xl max-w-md w-full shadow-2xl">
+        <div className="bg-white dark:bg-gray-800 rounded-xl sm:rounded-2xl max-w-md w-full shadow-2xl max-h-[90vh] overflow-y-auto">
           <form onSubmit={handleSubmit}>
-            <div className="p-8">
+            <div className="p-4 sm:p-6 lg:p-8">
               {/* Modal Header */}
-              <div className="flex justify-between items-center mb-8">
-                <div>
-                  <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 sm:mb-8">
+                <div className="min-w-0 flex-1">
+                  <h2 className="text-xl sm:text-2xl font-bold text-gray-800 dark:text-gray-100">
                     Create New Customer
                   </h2>
-                  <p className="text-gray-600 dark:text-gray-400 mt-1">
+                  <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 mt-1 leading-relaxed">
                     Add a new customer to the system
                   </p>
                 </div>
                 <button
                   type="button"
                   onClick={() => setShowCreateModal(false)}
-                  className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                  className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors flex-shrink-0"
                 >
                   <svg
-                    className="w-6 h-6"
+                    className="w-5 h-5 sm:w-6 sm:h-6"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -352,7 +352,7 @@ const Customers = () => {
               </div>
 
               {/* Form Fields */}
-              <div className="space-y-6">
+              <div className="space-y-4 sm:space-y-6">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     Name *
@@ -367,7 +367,7 @@ const Customers = () => {
                         name: e.target.value,
                       }))
                     }
-                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:border-orange-400 dark:focus:border-orange-400 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 transition-colors duration-300"
+                    className="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:border-orange-400 dark:focus:border-orange-400 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 transition-colors duration-300"
                     placeholder="Enter customer name"
                   />
                 </div>
@@ -386,7 +386,7 @@ const Customers = () => {
                         phone: e.target.value,
                       }))
                     }
-                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:border-orange-400 dark:focus:border-orange-400 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 transition-colors duration-300"
+                    className="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:border-orange-400 dark:focus:border-orange-400 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 transition-colors duration-300"
                     placeholder="Enter phone number"
                   />
                 </div>
@@ -404,7 +404,7 @@ const Customers = () => {
                         email: e.target.value,
                       }))
                     }
-                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:border-orange-400 dark:focus:border-orange-400 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 transition-colors duration-300"
+                    className="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:border-orange-400 dark:focus:border-orange-400 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 transition-colors duration-300"
                     placeholder="Enter email address"
                   />
                 </div>
@@ -424,25 +424,25 @@ const Customers = () => {
                         password: e.target.value,
                       }))
                     }
-                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:border-orange-400 dark:focus:border-orange-400 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 transition-colors duration-300"
+                    className="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:border-orange-400 dark:focus:border-orange-400 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 transition-colors duration-300"
                     placeholder="Enter password (min. 6 characters)"
                   />
                 </div>
               </div>
 
               {/* Actions */}
-              <div className="flex gap-4 mt-8">
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-6 sm:mt-8">
                 <button
                   type="button"
                   onClick={() => setShowCreateModal(false)}
-                  className="flex-1 px-6 py-3 bg-gray-600 dark:bg-gray-700 text-white rounded-lg font-medium hover:bg-gray-700 dark:hover:bg-gray-600 transition-colors duration-300"
+                  className="w-full sm:flex-1 px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-base bg-gray-600 dark:bg-gray-700 text-white rounded-lg font-medium hover:bg-gray-700 dark:hover:bg-gray-600 transition-colors duration-300"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={isCreating}
-                  className="flex-1 px-6 py-3 bg-orange-500 dark:bg-orange-600 text-white rounded-lg font-medium hover:bg-orange-600 dark:hover:bg-orange-700 transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full sm:flex-1 px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-base bg-orange-500 dark:bg-orange-600 text-white rounded-lg font-medium hover:bg-orange-600 dark:hover:bg-orange-700 transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {isCreating ? "Creating..." : "Create Customer"}
                 </button>
@@ -471,56 +471,62 @@ const Customers = () => {
         />
 
         {/* Main Content */}
-        <main className="flex-1 p-8">
-          <ToastContainer position="top-right" />
+        <main className="flex-1 p-4 sm:p-6 lg:p-8">
+          {/* Toast Container - Responsive positioning */}
+          <ToastContainer 
+            position="top-right"
+            className="!top-4 !right-4 sm:!top-6 sm:!right-6"
+            toastClassName="!text-sm !rounded-lg"
+          />
 
           {/* Page Header */}
-          <div className="mb-10">
-            <div className="flex items-center justify-between mb-6">
-              <div>
-                <h2 className="text-4xl font-bold text-gray-900 dark:text-gray-100 mb-3 transition-colors duration-300">
+          <div className="mb-6 sm:mb-8 lg:mb-10">
+            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 lg:gap-6 mb-4 sm:mb-6">
+              <div className="min-w-0 flex-1">
+                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 dark:text-gray-100 mb-2 sm:mb-3 transition-colors duration-300">
                   Customers Management
                 </h2>
-                <p className="text-lg text-gray-600 dark:text-gray-300 transition-colors duration-300">
+                <p className="text-sm sm:text-base lg:text-lg text-gray-600 dark:text-gray-300 transition-colors duration-300 leading-relaxed">
                   Manage your customer database
                 </p>
               </div>
-              <div className="flex gap-4">
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                 <button
                   onClick={fetchCustomers}
                   disabled={isLoading}
-                  className="bg-gray-500 dark:bg-gray-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-gray-600 dark:hover:bg-gray-700 transition-colors duration-300 flex items-center gap-2 shadow-sm dark:shadow-2xl disabled:opacity-50"
+                  className="w-full sm:w-auto bg-gray-500 dark:bg-gray-600 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-medium hover:bg-gray-600 dark:hover:bg-gray-700 transition-colors duration-300 flex items-center justify-center gap-2 shadow-sm dark:shadow-2xl disabled:opacity-50 text-sm sm:text-base"
                 >
                   <FiRefreshCw
-                    className={`text-lg ${isLoading ? "animate-spin" : ""}`}
+                    className={`text-base sm:text-lg ${isLoading ? "animate-spin" : ""}`}
                   />
                   Refresh
                 </button>
                 <button
                   onClick={() => setShowCreateModal(true)}
-                  className="bg-orange-500 dark:bg-orange-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-orange-600 dark:hover:bg-orange-700 transition-colors duration-300 flex items-center gap-2 shadow-sm dark:shadow-2xl"
+                  className="w-full sm:w-auto bg-orange-500 dark:bg-orange-600 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-medium hover:bg-orange-600 dark:hover:bg-orange-700 transition-colors duration-300 flex items-center justify-center gap-2 shadow-sm dark:shadow-2xl text-sm sm:text-base"
                 >
-                  <IoMdAdd className="text-lg" />
-                  Add New Customer
+                  <IoMdAdd className="text-base sm:text-lg" />
+                  <span className="hidden sm:inline">Add New Customer</span>
+                  <span className="sm:hidden">Add Customer</span>
                 </button>
               </div>
             </div>
 
-            {/* Stats Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-              <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm dark:shadow-2xl border border-gray-200 dark:border-gray-700 transition-colors duration-300">
-                <p className="text-sm text-gray-600 dark:text-gray-300 transition-colors duration-300">
+            {/* Stats Cards - Responsive grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 mb-4 sm:mb-6">
+              <div className="bg-white dark:bg-gray-800 p-3 sm:p-4 rounded-lg shadow-sm dark:shadow-2xl border border-gray-200 dark:border-gray-700 transition-colors duration-300">
+                <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-300 transition-colors duration-300">
                   Total Customers
                 </p>
-                <p className="text-2xl font-bold text-gray-800 dark:text-gray-100 transition-colors duration-300">
+                <p className="text-xl sm:text-2xl font-bold text-gray-800 dark:text-gray-100 transition-colors duration-300">
                   {customers.length}
                 </p>
               </div>
-              <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm dark:shadow-2xl border border-gray-200 dark:border-gray-700 transition-colors duration-300">
-                <p className="text-sm text-gray-600 dark:text-gray-300 transition-colors duration-300">
+              <div className="bg-white dark:bg-gray-800 p-3 sm:p-4 rounded-lg shadow-sm dark:shadow-2xl border border-gray-200 dark:border-gray-700 transition-colors duration-300">
+                <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-300 transition-colors duration-300">
                   New This Month
                 </p>
-                <p className="text-2xl font-bold text-green-600 dark:text-green-400 transition-colors duration-300">
+                <p className="text-xl sm:text-2xl font-bold text-green-600 dark:text-green-400 transition-colors duration-300">
                   {
                     customers.filter((customer) => {
                       const createdDate = new Date(customer.createdAt);
@@ -533,11 +539,11 @@ const Customers = () => {
                   }
                 </p>
               </div>
-              <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm dark:shadow-2xl border border-gray-200 dark:border-gray-700 transition-colors duration-300">
-                <p className="text-sm text-gray-600 dark:text-gray-300 transition-colors duration-300">
+              <div className="bg-white dark:bg-gray-800 p-3 sm:p-4 rounded-lg shadow-sm dark:shadow-2xl border border-gray-200 dark:border-gray-700 transition-colors duration-300 sm:col-span-2 lg:col-span-1">
+                <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-300 transition-colors duration-300">
                   With Email
                 </p>
-                <p className="text-2xl font-bold text-blue-600 dark:text-blue-400 transition-colors duration-300">
+                <p className="text-xl sm:text-2xl font-bold text-blue-600 dark:text-blue-400 transition-colors duration-300">
                   {customers.filter((customer) => customer.email).length}
                 </p>
               </div>
@@ -545,25 +551,25 @@ const Customers = () => {
           </div>
 
           {/* Search and View Mode */}
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-2xl border border-gray-200 dark:border-gray-700 p-6 mb-6 transition-colors duration-300">
-            <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-2xl border border-gray-200 dark:border-gray-700 p-4 sm:p-6 mb-4 sm:mb-6 transition-colors duration-300">
+            <div className="flex flex-col sm:flex-row gap-4 items-center justify-between">
               {/* Search */}
-              <div className="relative flex-1 max-w-md">
-                <IoSearchOutline className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500 transition-colors duration-300" />
+              <div className="relative w-full sm:flex-1 sm:max-w-md">
+                <IoSearchOutline className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500 transition-colors duration-300 text-sm sm:text-base" />
                 <input
                   type="text"
                   placeholder="Search customers..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:border-orange-400 dark:focus:border-orange-400 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 transition-colors duration-300"
+                  className="w-full pl-9 sm:pl-10 pr-4 py-2 sm:py-3 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:border-orange-400 dark:focus:border-orange-400 text-sm sm:text-base bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 transition-colors duration-300"
                 />
               </div>
 
               {/* View Mode Toggle */}
-              <div className="flex border border-gray-300 dark:border-gray-600 rounded-md overflow-hidden transition-colors duration-300">
+              <div className="flex border border-gray-300 dark:border-gray-600 rounded-md overflow-hidden transition-colors duration-300 w-full sm:w-auto">
                 <button
                   onClick={() => setViewMode("grid")}
-                  className={`px-3 py-2 text-sm transition-colors duration-300 ${
+                  className={`flex-1 sm:flex-none px-4 sm:px-3 py-2 text-sm transition-colors duration-300 ${
                     viewMode === "grid"
                       ? "bg-orange-500 dark:bg-orange-600 text-white"
                       : "bg-white dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600"
@@ -573,7 +579,7 @@ const Customers = () => {
                 </button>
                 <button
                   onClick={() => setViewMode("list")}
-                  className={`px-3 py-2 text-sm transition-colors duration-300 ${
+                  className={`flex-1 sm:flex-none px-4 sm:px-3 py-2 text-sm transition-colors duration-300 ${
                     viewMode === "list"
                       ? "bg-orange-500 dark:bg-orange-600 text-white"
                       : "bg-white dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600"
@@ -587,19 +593,19 @@ const Customers = () => {
 
           {/* Customers Display */}
           {isLoading ? (
-            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm dark:shadow-2xl border border-gray-100 dark:border-gray-700 p-16 text-center transition-colors duration-300">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500 mx-auto mb-4"></div>
-              <p className="text-gray-600 dark:text-gray-400">
+            <div className="bg-white dark:bg-gray-800 rounded-xl sm:rounded-2xl shadow-sm dark:shadow-2xl border border-gray-100 dark:border-gray-700 p-8 sm:p-12 lg:p-16 text-center transition-colors duration-300">
+              <div className="animate-spin rounded-full h-8 w-8 sm:h-10 sm:w-10 lg:h-12 lg:w-12 border-b-2 border-orange-500 mx-auto mb-4"></div>
+              <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400">
                 Loading customers...
               </p>
             </div>
           ) : filteredCustomers.length === 0 ? (
-            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm dark:shadow-2xl border border-gray-100 dark:border-gray-700 p-16 text-center transition-colors duration-300">
-              <div className="text-8xl mb-6 opacity-50">👥</div>
-              <h3 className="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-3 transition-colors duration-300">
+            <div className="bg-white dark:bg-gray-800 rounded-xl sm:rounded-2xl shadow-sm dark:shadow-2xl border border-gray-100 dark:border-gray-700 p-8 sm:p-12 lg:p-16 text-center transition-colors duration-300">
+              <div className="text-4xl sm:text-6xl lg:text-8xl mb-4 sm:mb-6 opacity-50">👥</div>
+              <h3 className="text-xl sm:text-2xl font-bold text-gray-800 dark:text-gray-100 mb-2 sm:mb-3 transition-colors duration-300">
                 {searchTerm ? "No customers found" : "No customers yet"}
               </h3>
-              <p className="text-gray-600 dark:text-gray-300 mb-8 text-lg transition-colors duration-300">
+              <p className="text-sm sm:text-base lg:text-lg text-gray-600 dark:text-gray-300 mb-6 sm:mb-8 transition-colors duration-300 leading-relaxed">
                 {searchTerm
                   ? "Try adjusting your search criteria"
                   : "Start by adding your first customer"}
@@ -607,7 +613,7 @@ const Customers = () => {
               {!searchTerm && (
                 <button
                   onClick={() => setShowCreateModal(true)}
-                  className="bg-gradient-to-r from-orange-500 to-orange-600 dark:from-orange-600 dark:to-orange-700 text-white px-8 py-3 rounded-xl font-semibold hover:from-orange-600 hover:to-orange-700 dark:hover:from-orange-700 dark:hover:to-orange-800 transform hover:scale-105 transition-all duration-200 shadow-lg dark:shadow-2xl"
+                  className="bg-gradient-to-r from-orange-500 to-orange-600 dark:from-orange-600 dark:to-orange-700 text-white px-6 sm:px-8 py-2 sm:py-3 rounded-lg sm:rounded-xl font-semibold hover:from-orange-600 hover:to-orange-700 dark:hover:from-orange-700 dark:hover:to-orange-800 transform hover:scale-105 transition-all duration-200 shadow-lg dark:shadow-2xl text-sm sm:text-base"
                 >
                   Add Your First Customer
                 </button>
@@ -616,8 +622,8 @@ const Customers = () => {
           ) : (
             <>
               {/* Results Count */}
-              <div className="mb-6">
-                <p className="text-gray-600 dark:text-gray-300 font-medium transition-colors duration-300">
+              <div className="mb-4 sm:mb-6">
+                <p className="text-sm sm:text-base text-gray-600 dark:text-gray-300 font-medium transition-colors duration-300">
                   Showing {filteredCustomers.length} of {customers.length}{" "}
                   customers
                 </p>
@@ -625,37 +631,37 @@ const Customers = () => {
 
               {/* Grid View */}
               {viewMode === "grid" && (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
                   {filteredCustomers.map((customer) => (
                     <div
                       key={customer._id}
                       className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-2xl border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-md dark:hover:shadow-xl transition-all duration-300"
                     >
-                      <div className="p-6">
+                      <div className="p-4 sm:p-6">
                         {/* Customer Avatar */}
-                        <div className="flex justify-center mb-4">
-                          <div className="w-16 h-16 bg-orange-100 dark:bg-orange-900/30 rounded-full flex items-center justify-center">
-                            <MdPerson className="w-8 h-8 text-orange-500 dark:text-orange-400" />
+                        <div className="flex justify-center mb-3 sm:mb-4">
+                          <div className="w-12 h-12 sm:w-16 sm:h-16 bg-orange-100 dark:bg-orange-900/30 rounded-full flex items-center justify-center">
+                            <MdPerson className="w-6 h-6 sm:w-8 sm:h-8 text-orange-500 dark:text-orange-400" />
                           </div>
                         </div>
 
                         {/* Customer Info */}
-                        <div className="text-center mb-4">
-                          <h3 className="font-bold text-lg text-gray-900 dark:text-gray-100 mb-1 transition-colors duration-300">
+                        <div className="text-center mb-3 sm:mb-4">
+                          <h3 className="font-bold text-base sm:text-lg text-gray-900 dark:text-gray-100 mb-1 transition-colors duration-300 break-words">
                             {customer.name || "Unnamed Customer"}
                           </h3>
-                          <p className="text-sm text-gray-600 dark:text-gray-400 transition-colors duration-300">
+                          <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 transition-colors duration-300 break-all">
                             {customer.phone}
                           </p>
                           {customer.email && (
-                            <p className="text-sm text-gray-600 dark:text-gray-400 transition-colors duration-300">
+                            <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 transition-colors duration-300 break-all mt-1">
                               {customer.email}
                             </p>
                           )}
                         </div>
 
                         {/* Member Since */}
-                        <div className="text-center mb-4">
+                        <div className="text-center mb-3 sm:mb-4">
                           <p className="text-xs text-gray-500 dark:text-gray-400 transition-colors duration-300">
                             Member since{" "}
                             {new Date(customer.createdAt).toLocaleDateString()}
@@ -669,7 +675,7 @@ const Customers = () => {
                               setSelectedCustomer(customer);
                               setShowCustomerModal(true);
                             }}
-                            className="flex-1 px-3 py-2 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/50 rounded-md transition-colors duration-300 text-center"
+                            className="flex-1 px-2 sm:px-3 py-2 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/50 rounded-md transition-colors duration-300 text-center"
                             title="View customer details"
                           >
                             <MdVisibility className="w-4 h-4 mx-auto" />
@@ -678,7 +684,7 @@ const Customers = () => {
                             onClick={() =>
                               handleDeleteCustomer(customer._id, customer.name)
                             }
-                            className="flex-1 px-3 py-2 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/50 rounded-md transition-colors duration-300 text-center"
+                            className="flex-1 px-2 sm:px-3 py-2 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/50 rounded-md transition-colors duration-300 text-center"
                             title="Delete customer"
                           >
                             <MdDelete className="w-4 h-4 mx-auto" />
@@ -692,21 +698,76 @@ const Customers = () => {
 
               {/* List View */}
               {viewMode === "list" && (
-                <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm dark:shadow-2xl border border-gray-100 dark:border-gray-700 overflow-hidden transition-colors duration-300">
-                  <div className="overflow-x-auto">
+                <div className="bg-white dark:bg-gray-800 rounded-xl sm:rounded-2xl shadow-sm dark:shadow-2xl border border-gray-100 dark:border-gray-700 overflow-hidden transition-colors duration-300">
+                  {/* Mobile List View */}
+                  <div className="block sm:hidden">
+                    <div className="divide-y divide-gray-100 dark:divide-gray-600">
+                      {filteredCustomers.map((customer) => (
+                        <div
+                          key={customer._id}
+                          className="p-4 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200"
+                        >
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-3 min-w-0 flex-1">
+                              <div className="w-10 h-10 bg-orange-100 dark:bg-orange-900/30 rounded-full flex items-center justify-center flex-shrink-0">
+                                <MdPerson className="w-5 h-5 text-orange-500 dark:text-orange-400" />
+                              </div>
+                              <div className="min-w-0 flex-1">
+                                <div className="font-bold text-gray-900 dark:text-gray-100 text-sm transition-colors duration-300 truncate">
+                                  {customer.name || "Unnamed Customer"}
+                                </div>
+                                <div className="text-xs text-gray-600 dark:text-gray-300 transition-colors duration-300">
+                                  {customer.phone}
+                                </div>
+                                {customer.email && (
+                                  <div className="text-xs text-gray-500 dark:text-gray-400 transition-colors duration-300 truncate">
+                                    {customer.email}
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                            <div className="flex gap-2 flex-shrink-0">
+                              <button
+                                onClick={() => {
+                                  setSelectedCustomer(customer);
+                                  setShowCustomerModal(true);
+                                }}
+                                className="p-2 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/50 rounded-lg transition-colors duration-300"
+                                title="View customer details"
+                              >
+                                <MdVisibility className="w-4 h-4" />
+                              </button>
+                              <button
+                                onClick={() =>
+                                  handleDeleteCustomer(customer._id, customer.name)
+                                }
+                                className="p-2 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/50 rounded-lg transition-colors duration-300"
+                                title="Delete customer"
+                              >
+                                <MdDelete className="w-4 h-4" />
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Desktop Table View */}
+                  <div className="hidden sm:block overflow-x-auto">
                     <table className="w-full">
                       <thead className="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-600 border-b border-gray-200 dark:border-gray-600 transition-colors duration-300">
                         <tr>
-                          <th className="px-8 py-5 text-left text-xs font-bold text-gray-600 dark:text-gray-300 uppercase tracking-wider transition-colors duration-300">
+                          <th className="px-4 lg:px-8 py-3 lg:py-5 text-left text-xs font-bold text-gray-600 dark:text-gray-300 uppercase tracking-wider transition-colors duration-300">
                             Customer
                           </th>
-                          <th className="px-8 py-5 text-left text-xs font-bold text-gray-600 dark:text-gray-300 uppercase tracking-wider transition-colors duration-300">
+                          <th className="px-4 lg:px-8 py-3 lg:py-5 text-left text-xs font-bold text-gray-600 dark:text-gray-300 uppercase tracking-wider transition-colors duration-300">
                             Contact
                           </th>
-                          <th className="px-8 py-5 text-left text-xs font-bold text-gray-600 dark:text-gray-300 uppercase tracking-wider transition-colors duration-300">
+                          <th className="px-4 lg:px-8 py-3 lg:py-5 text-left text-xs font-bold text-gray-600 dark:text-gray-300 uppercase tracking-wider transition-colors duration-300">
                             Member Since
                           </th>
-                          <th className="px-8 py-5 text-left text-xs font-bold text-gray-600 dark:text-gray-300 uppercase tracking-wider transition-colors duration-300">
+                          <th className="px-4 lg:px-8 py-3 lg:py-5 text-left text-xs font-bold text-gray-600 dark:text-gray-300 uppercase tracking-wider transition-colors duration-300">
                             Actions
                           </th>
                         </tr>
@@ -717,40 +778,40 @@ const Customers = () => {
                             key={customer._id}
                             className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200"
                           >
-                            <td className="px-8 py-6 whitespace-nowrap">
-                              <div className="flex items-center gap-4">
-                                <div className="w-12 h-12 bg-orange-100 dark:bg-orange-900/30 rounded-full flex items-center justify-center">
-                                  <MdPerson className="w-6 h-6 text-orange-500 dark:text-orange-400" />
+                            <td className="px-4 lg:px-8 py-4 lg:py-6 whitespace-nowrap">
+                              <div className="flex items-center gap-3 lg:gap-4">
+                                <div className="w-8 h-8 lg:w-12 lg:h-12 bg-orange-100 dark:bg-orange-900/30 rounded-full flex items-center justify-center flex-shrink-0">
+                                  <MdPerson className="w-4 h-4 lg:w-6 lg:h-6 text-orange-500 dark:text-orange-400" />
                                 </div>
-                                <div>
-                                  <div className="font-bold text-gray-900 dark:text-gray-100 text-lg transition-colors duration-300">
+                                <div className="min-w-0">
+                                  <div className="font-bold text-gray-900 dark:text-gray-100 text-sm lg:text-lg transition-colors duration-300 truncate">
                                     {customer.name || "Unnamed Customer"}
                                   </div>
-                                  <div className="text-sm text-gray-600 dark:text-gray-300 transition-colors duration-300 font-mono">
+                                  <div className="text-xs lg:text-sm text-gray-600 dark:text-gray-300 transition-colors duration-300 font-mono">
                                     ID: {customer._id?.slice(-8).toUpperCase()}
                                   </div>
                                 </div>
                               </div>
                             </td>
-                            <td className="px-8 py-6 whitespace-nowrap">
+                            <td className="px-4 lg:px-8 py-4 lg:py-6 whitespace-nowrap">
                               <div>
                                 <div className="flex items-center gap-2 mb-1">
-                                  <MdPhone className="w-4 h-4 text-gray-500 dark:text-gray-400" />
-                                  <span className="text-gray-800 dark:text-gray-200 font-medium transition-colors duration-300">
+                                  <MdPhone className="w-3 h-3 lg:w-4 lg:h-4 text-gray-500 dark:text-gray-400 flex-shrink-0" />
+                                  <span className="text-gray-800 dark:text-gray-200 font-medium transition-colors duration-300 text-xs lg:text-sm truncate">
                                     {customer.phone}
                                   </span>
                                 </div>
                                 {customer.email && (
                                   <div className="flex items-center gap-2">
-                                    <MdEmail className="w-4 h-4 text-gray-500 dark:text-gray-400" />
-                                    <span className="text-sm text-gray-600 dark:text-gray-300 transition-colors duration-300">
+                                    <MdEmail className="w-3 h-3 lg:w-4 lg:h-4 text-gray-500 dark:text-gray-400 flex-shrink-0" />
+                                    <span className="text-xs lg:text-sm text-gray-600 dark:text-gray-300 transition-colors duration-300 truncate">
                                       {customer.email}
                                     </span>
                                   </div>
                                 )}
                               </div>
                             </td>
-                            <td className="px-8 py-6 whitespace-nowrap text-sm text-gray-600 dark:text-gray-300 transition-colors duration-300">
+                            <td className="px-4 lg:px-8 py-4 lg:py-6 whitespace-nowrap text-xs lg:text-sm text-gray-600 dark:text-gray-300 transition-colors duration-300">
                               <div className="max-w-xs">
                                 <div className="font-medium">
                                   {
@@ -759,7 +820,7 @@ const Customers = () => {
                                     )[0]
                                   }
                                 </div>
-                                <div className="text-xs">
+                                <div className="text-xs opacity-75">
                                   {
                                     formatDate(customer.createdAt).split(
                                       " at "
@@ -768,17 +829,17 @@ const Customers = () => {
                                 </div>
                               </div>
                             </td>
-                            <td className="px-8 py-6 whitespace-nowrap">
-                              <div className="flex gap-2">
+                            <td className="px-4 lg:px-8 py-4 lg:py-6 whitespace-nowrap">
+                              <div className="flex gap-1 lg:gap-2">
                                 <button
                                   onClick={() => {
                                     setSelectedCustomer(customer);
                                     setShowCustomerModal(true);
                                   }}
-                                  className="p-2 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/50 rounded-lg transition-colors duration-300"
+                                  className="p-1.5 lg:p-2 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/50 rounded-lg transition-colors duration-300"
                                   title="View customer details"
                                 >
-                                  <MdVisibility className="w-5 h-5" />
+                                  <MdVisibility className="w-4 h-4 lg:w-5 lg:h-5" />
                                 </button>
                                 <button
                                   onClick={() =>
@@ -787,10 +848,10 @@ const Customers = () => {
                                       customer.name
                                     )
                                   }
-                                  className="p-2 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/50 rounded-lg transition-colors duration-300"
+                                  className="p-1.5 lg:p-2 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/50 rounded-lg transition-colors duration-300"
                                   title="Delete customer"
                                 >
-                                  <MdDelete className="w-5 h-5" />
+                                  <MdDelete className="w-4 h-4 lg:w-5 lg:h-5" />
                                 </button>
                               </div>
                             </td>

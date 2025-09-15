@@ -283,7 +283,7 @@ const Settings = () => {
 
     const config = roleConfig[role] || roleConfig.admin;
     return (
-      <span className={`px-3 py-1 text-sm font-medium rounded-full ${config.color} transition-colors duration-300`}>
+      <span className={`px-2 sm:px-3 py-1 text-xs sm:text-sm font-medium rounded-full ${config.color} transition-colors duration-300`}>
         {config.label}
       </span>
     );
@@ -295,10 +295,10 @@ const Settings = () => {
         <AdminNavbar setSidebarCollapsed={setSidebarCollapsed} sidebarCollapsed={sidebarCollapsed} />
         <div className="flex">
           <AdminSidebar activeTab={activeTab} setActiveTab={setActiveTab} sidebarCollapsed={sidebarCollapsed} />
-          <main className="flex-1 p-8">
-            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm dark:shadow-2xl border border-gray-100 dark:border-gray-700 p-16 text-center transition-colors duration-300">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500 mx-auto mb-4"></div>
-              <p className="text-gray-600 dark:text-gray-400">Loading settings...</p>
+          <main className="flex-1 p-4 sm:p-6 lg:p-8">
+            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm dark:shadow-2xl border border-gray-100 dark:border-gray-700 p-8 sm:p-12 lg:p-16 text-center transition-colors duration-300">
+              <div className="animate-spin rounded-full h-8 w-8 sm:h-10 sm:w-10 lg:h-12 lg:w-12 border-b-2 border-orange-500 mx-auto mb-4"></div>
+              <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400">Loading settings...</p>
             </div>
           </main>
         </div>
@@ -323,58 +323,68 @@ const Settings = () => {
         />
 
         {/* Main Content */}
-        <main className="flex-1 p-8">
-          <ToastContainer position="top-right" />
+        <main className="flex-1 p-4 sm:p-6 lg:p-8">
+          {/* Toast Container - Responsive positioning */}
+          <ToastContainer 
+            position="top-right" 
+            className="!top-4 !right-4 sm:!top-6 sm:!right-6"
+            toastClassName="!text-sm !rounded-lg"
+          />
           
           {/* Page Header */}
-          <div className="mb-10">
-            <div className="flex items-center justify-between mb-6">
-              <div>
-                <h2 className="text-4xl font-bold text-gray-900 dark:text-gray-100 mb-3 transition-colors duration-300">
+          <div className="mb-6 sm:mb-8 lg:mb-10">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 sm:gap-6 mb-4 sm:mb-6">
+              <div className="min-w-0 flex-1">
+                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 dark:text-gray-100 mb-2 sm:mb-3 transition-colors duration-300">
                   Admin Settings
                 </h2>
-                <p className="text-lg text-gray-600 dark:text-gray-300 transition-colors duration-300">
+                <p className="text-sm sm:text-base lg:text-lg text-gray-600 dark:text-gray-300 transition-colors duration-300 leading-relaxed">
                   Manage your account preferences and security settings
                 </p>
               </div>
-              <button
-                onClick={fetchAdminProfile}
-                disabled={isLoading}
-                className="bg-orange-500 dark:bg-orange-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-orange-600 dark:hover:bg-orange-700 transition-colors duration-300 flex items-center gap-2 shadow-sm dark:shadow-2xl disabled:opacity-50"
-              >
-                <FiRefreshCw className={`text-lg ${isLoading ? 'animate-spin' : ''}`} />
-                Refresh
-              </button>
+              <div className="flex-shrink-0">
+                <button
+                  onClick={fetchAdminProfile}
+                  disabled={isLoading}
+                  className="w-full sm:w-auto bg-orange-500 dark:bg-orange-600 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-medium hover:bg-orange-600 dark:hover:bg-orange-700 transition-colors duration-300 flex items-center justify-center gap-2 shadow-sm dark:shadow-2xl disabled:opacity-50 text-sm sm:text-base"
+                >
+                  <FiRefreshCw className={`text-base sm:text-lg ${isLoading ? 'animate-spin' : ''}`} />
+                  <span className="hidden sm:inline">Refresh</span>
+                  <span className="sm:hidden">Refresh</span>
+                </button>
+              </div>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
-            {/* Profile Information */}
-            <div className="xl:col-span-2">
-              <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm dark:shadow-2xl border border-gray-100 dark:border-gray-700 transition-colors duration-300">
-                <div className="p-8">
-                  <div className="flex items-center justify-between mb-8">
-                    <div className="flex items-center space-x-3">
-                      <div className="p-3 bg-orange-100 dark:bg-orange-900/30 rounded-xl">
-                        <MdPerson className="w-6 h-6 text-orange-600 dark:text-orange-400" />
+          {/* Main Content Grid - Responsive layout */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
+            {/* Profile Information - Full width on mobile, 2/3 on desktop */}
+            <div className="lg:col-span-2">
+              <div className="bg-white dark:bg-gray-800 rounded-xl sm:rounded-2xl shadow-sm dark:shadow-2xl border border-gray-100 dark:border-gray-700 transition-colors duration-300">
+                <div className="p-4 sm:p-6 lg:p-8">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 sm:gap-6 mb-6 sm:mb-8">
+                    <div className="flex items-start sm:items-center space-x-3">
+                      <div className="p-2 sm:p-3 bg-orange-100 dark:bg-orange-900/30 rounded-lg sm:rounded-xl flex-shrink-0">
+                        <MdPerson className="w-5 h-5 sm:w-6 sm:h-6 text-orange-600 dark:text-orange-400" />
                       </div>
-                      <div>
-                        <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 transition-colors duration-300">
+                      <div className="min-w-0 flex-1">
+                        <h3 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-100 transition-colors duration-300">
                           Profile Information
                         </h3>
-                        <p className="text-gray-600 dark:text-gray-400 transition-colors duration-300">
+                        <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 transition-colors duration-300 mt-1 leading-relaxed">
                           Update your account details and preferences
                         </p>
                       </div>
                     </div>
                     
-                    <div className="flex gap-3">
+                    {/* Action buttons - Stack on mobile */}
+                    <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 w-full sm:w-auto">
                       {isEditing ? (
                         <>
                           <button
                             onClick={handleEditToggle}
                             disabled={isUpdating}
-                            className="px-4 py-2 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg transition-colors duration-300 flex items-center gap-2 disabled:opacity-50"
+                            className="w-full sm:w-auto px-3 sm:px-4 py-2 text-sm sm:text-base text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg transition-colors duration-300 flex items-center justify-center gap-2 disabled:opacity-50"
                           >
                             <MdCancel className="w-4 h-4" />
                             Cancel
@@ -382,7 +392,7 @@ const Settings = () => {
                           <button
                             onClick={handleUpdateProfile}
                             disabled={isUpdating}
-                            className="px-4 py-2 bg-orange-500 dark:bg-orange-600 text-white hover:bg-orange-600 dark:hover:bg-orange-700 rounded-lg transition-colors duration-300 flex items-center gap-2 disabled:opacity-50"
+                            className="w-full sm:w-auto px-3 sm:px-4 py-2 text-sm sm:text-base bg-orange-500 dark:bg-orange-600 text-white hover:bg-orange-600 dark:hover:bg-orange-700 rounded-lg transition-colors duration-300 flex items-center justify-center gap-2 disabled:opacity-50"
                           >
                             {isUpdating ? (
                               <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
@@ -395,7 +405,7 @@ const Settings = () => {
                       ) : (
                         <button
                           onClick={handleEditToggle}
-                          className="px-4 py-2 bg-blue-500 dark:bg-blue-600 text-white hover:bg-blue-600 dark:hover:bg-blue-700 rounded-lg transition-colors duration-300 flex items-center gap-2"
+                          className="w-full sm:w-auto px-3 sm:px-4 py-2 text-sm sm:text-base bg-blue-500 dark:bg-blue-600 text-white hover:bg-blue-600 dark:hover:bg-blue-700 rounded-lg transition-colors duration-300 flex items-center justify-center gap-2"
                         >
                           <MdEdit className="w-4 h-4" />
                           Edit Profile
@@ -404,7 +414,8 @@ const Settings = () => {
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {/* Form Grid - Single column on mobile, 2 columns on tablet+ */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                     {/* Name Field */}
                     <div>
                       <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-300">
@@ -416,18 +427,18 @@ const Settings = () => {
                             type="text"
                             value={editData.name}
                             onChange={(e) => handleInputChange('name', e.target.value)}
-                            className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400 dark:focus:ring-orange-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 transition-colors duration-300 ${
+                            className={`w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400 dark:focus:ring-orange-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 transition-colors duration-300 ${
                               errors.name ? 'border-red-300 dark:border-red-600' : 'border-gray-300 dark:border-gray-600'
                             }`}
                             placeholder="Enter your full name"
                           />
                           {errors.name && (
-                            <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.name}</p>
+                            <p className="mt-1 text-xs sm:text-sm text-red-600 dark:text-red-400">{errors.name}</p>
                           )}
                         </div>
                       ) : (
-                        <div className="px-4 py-3 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600 transition-colors duration-300">
-                          <p className="text-gray-900 dark:text-gray-100 font-medium">{adminData.name || "N/A"}</p>
+                        <div className="px-3 sm:px-4 py-2 sm:py-3 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600 transition-colors duration-300">
+                          <p className="text-sm sm:text-base text-gray-900 dark:text-gray-100 font-medium break-words">{adminData.name || "N/A"}</p>
                         </div>
                       )}
                     </div>
@@ -443,18 +454,18 @@ const Settings = () => {
                             type="email"
                             value={editData.email}
                             onChange={(e) => handleInputChange('email', e.target.value)}
-                            className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400 dark:focus:ring-orange-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 transition-colors duration-300 ${
+                            className={`w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400 dark:focus:ring-orange-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 transition-colors duration-300 ${
                               errors.email ? 'border-red-300 dark:border-red-600' : 'border-gray-300 dark:border-gray-600'
                             }`}
                             placeholder="Enter your email address"
                           />
                           {errors.email && (
-                            <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.email}</p>
+                            <p className="mt-1 text-xs sm:text-sm text-red-600 dark:text-red-400">{errors.email}</p>
                           )}
                         </div>
                       ) : (
-                        <div className="px-4 py-3 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600 transition-colors duration-300">
-                          <p className="text-gray-900 dark:text-gray-100 font-medium">{adminData.email || "N/A"}</p>
+                        <div className="px-3 sm:px-4 py-2 sm:py-3 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600 transition-colors duration-300">
+                          <p className="text-sm sm:text-base text-gray-900 dark:text-gray-100 font-medium break-all">{adminData.email || "N/A"}</p>
                         </div>
                       )}
                     </div>
@@ -464,7 +475,7 @@ const Settings = () => {
                       <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-300">
                         Role
                       </label>
-                      <div className="px-4 py-3 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600 transition-colors duration-300">
+                      <div className="px-3 sm:px-4 py-2 sm:py-3 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600 transition-colors duration-300">
                         {getRoleBadge(adminData.role)}
                       </div>
                     </div>
@@ -474,8 +485,8 @@ const Settings = () => {
                       <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-300">
                         Account Created
                       </label>
-                      <div className="px-4 py-3 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600 transition-colors duration-300">
-                        <p className="text-gray-900 dark:text-gray-100 font-medium">{formatDate(adminData.createdAt)}</p>
+                      <div className="px-3 sm:px-4 py-2 sm:py-3 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600 transition-colors duration-300">
+                        <p className="text-sm sm:text-base text-gray-900 dark:text-gray-100 font-medium break-words">{formatDate(adminData.createdAt)}</p>
                       </div>
                     </div>
                   </div>
@@ -483,35 +494,35 @@ const Settings = () => {
               </div>
             </div>
 
-            {/* Account Overview */}
-            <div className="space-y-6">
+            {/* Sidebar Info - Full width on mobile, 1/3 on desktop */}
+            <div className="space-y-4 sm:space-y-6">
               {/* Quick Stats */}
-              <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm dark:shadow-2xl border border-gray-100 dark:border-gray-700 p-6 transition-colors duration-300">
-                <div className="flex items-center space-x-3 mb-6">
-                  <div className="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
-                    <IoSettingsSharp className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+              <div className="bg-white dark:bg-gray-800 rounded-xl sm:rounded-2xl shadow-sm dark:shadow-2xl border border-gray-100 dark:border-gray-700 p-4 sm:p-6 transition-colors duration-300">
+                <div className="flex items-center space-x-3 mb-4 sm:mb-6">
+                  <div className="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex-shrink-0">
+                    <IoSettingsSharp className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600 dark:text-blue-400" />
                   </div>
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 transition-colors duration-300">
+                  <h3 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-gray-100 transition-colors duration-300">
                     Account Overview
                   </h3>
                 </div>
 
-                <div className="space-y-4">
+                <div className="space-y-3 sm:space-y-4">
                   <div className="flex justify-between items-center py-2">
-                    <span className="text-sm text-gray-600 dark:text-gray-400 transition-colors duration-300">Status</span>
+                    <span className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 transition-colors duration-300">Status</span>
                     <span className="px-2 py-1 text-xs font-medium rounded-full bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 transition-colors duration-300">
                       Active
                     </span>
                   </div>
                   <div className="flex justify-between items-center py-2">
-                    <span className="text-sm text-gray-600 dark:text-gray-400 transition-colors duration-300">Role</span>
-                    <span className="text-sm font-medium text-gray-900 dark:text-gray-100 transition-colors duration-300 capitalize">
+                    <span className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 transition-colors duration-300">Role</span>
+                    <span className="text-xs sm:text-sm font-medium text-gray-900 dark:text-gray-100 transition-colors duration-300 capitalize">
                       {adminData.role}
                     </span>
                   </div>
                   <div className="flex justify-between items-center py-2">
-                    <span className="text-sm text-gray-600 dark:text-gray-400 transition-colors duration-300">Last Login</span>
-                    <span className="text-sm font-medium text-gray-900 dark:text-gray-100 transition-colors duration-300">
+                    <span className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 transition-colors duration-300">Last Login</span>
+                    <span className="text-xs sm:text-sm font-medium text-gray-900 dark:text-gray-100 transition-colors duration-300">
                       Today
                     </span>
                   </div>
@@ -519,17 +530,17 @@ const Settings = () => {
               </div>
 
               {/* Security Settings */}
-              <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm dark:shadow-2xl border border-gray-100 dark:border-gray-700 p-6 transition-colors duration-300">
-                <div className="flex items-center space-x-3 mb-6">
-                  <div className="p-2 bg-red-100 dark:bg-red-900/30 rounded-lg">
-                    <MdSecurity className="w-5 h-5 text-red-600 dark:text-red-400" />
+              <div className="bg-white dark:bg-gray-800 rounded-xl sm:rounded-2xl shadow-sm dark:shadow-2xl border border-gray-100 dark:border-gray-700 p-4 sm:p-6 transition-colors duration-300">
+                <div className="flex items-center space-x-3 mb-4 sm:mb-6">
+                  <div className="p-2 bg-red-100 dark:bg-red-900/30 rounded-lg flex-shrink-0">
+                    <MdSecurity className="w-4 h-4 sm:w-5 sm:h-5 text-red-600 dark:text-red-400" />
                   </div>
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 transition-colors duration-300">
+                  <h3 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-gray-100 transition-colors duration-300">
                     Security
                   </h3>
                 </div>
 
-                <div className="space-y-4">
+                <div className="space-y-3 sm:space-y-4">
                   <button
                     onClick={() => {
                       // You could implement a modal or expand this section
@@ -538,8 +549,8 @@ const Settings = () => {
                     className="w-full flex items-center justify-between p-3 text-left hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors duration-300"
                   >
                     <div className="flex items-center space-x-3">
-                      <MdLock className="w-4 h-4 text-gray-400" />
-                      <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Change Password</span>
+                      <MdLock className="w-4 h-4 text-gray-400 flex-shrink-0" />
+                      <span className="text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300">Change Password</span>
                     </div>
                     <span className="text-xs text-gray-400">→</span>
                   </button>
@@ -548,27 +559,28 @@ const Settings = () => {
             </div>
           </div>
 
-          {/* Change Password Section */}
-          <div className="mt-8">
-            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm dark:shadow-2xl border border-gray-100 dark:border-gray-700 transition-colors duration-300">
-              <div className="p-8">
-                <div className="flex items-center space-x-3 mb-8">
-                  <div className="p-3 bg-red-100 dark:bg-red-900/30 rounded-xl">
-                    <MdLock className="w-6 h-6 text-red-600 dark:text-red-400" />
+          {/* Change Password Section - Full width */}
+          <div className="mt-6 sm:mt-8">
+            <div className="bg-white dark:bg-gray-800 rounded-xl sm:rounded-2xl shadow-sm dark:shadow-2xl border border-gray-100 dark:border-gray-700 transition-colors duration-300">
+              <div className="p-4 sm:p-6 lg:p-8">
+                <div className="flex items-start sm:items-center space-x-3 mb-6 sm:mb-8">
+                  <div className="p-2 sm:p-3 bg-red-100 dark:bg-red-900/30 rounded-lg sm:rounded-xl flex-shrink-0">
+                    <MdLock className="w-5 h-5 sm:w-6 sm:h-6 text-red-600 dark:text-red-400" />
                   </div>
-                  <div>
-                    <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 transition-colors duration-300">
+                  <div className="min-w-0 flex-1">
+                    <h3 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-100 transition-colors duration-300">
                       Change Password
                     </h3>
-                    <p className="text-gray-600 dark:text-gray-400 transition-colors duration-300">
+                    <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 transition-colors duration-300 mt-1 leading-relaxed">
                       Update your password to keep your account secure
                     </p>
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl">
+                {/* Password Form - Responsive grid */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 max-w-full lg:max-w-6xl">
                   {/* Current Password */}
-                  <div>
+                  <div className="sm:col-span-2 lg:col-span-1">
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-300">
                       Current Password
                     </label>
@@ -577,7 +589,7 @@ const Settings = () => {
                         type={showCurrentPassword ? "text" : "password"}
                         value={passwordData.currentPassword}
                         onChange={(e) => handlePasswordChange('currentPassword', e.target.value)}
-                        className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400 dark:focus:ring-orange-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 transition-colors duration-300 pr-12 ${
+                        className={`w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400 dark:focus:ring-orange-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 transition-colors duration-300 pr-12 ${
                           errors.currentPassword ? 'border-red-300 dark:border-red-600' : 'border-gray-300 dark:border-gray-600'
                         }`}
                         placeholder="Enter current password"
@@ -587,16 +599,16 @@ const Settings = () => {
                         onClick={() => setShowCurrentPassword(!showCurrentPassword)}
                         className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
                       >
-                        {showCurrentPassword ? <MdVisibilityOff className="w-5 h-5" /> : <MdVisibility className="w-5 h-5" />}
+                        {showCurrentPassword ? <MdVisibilityOff className="w-4 h-4 sm:w-5 sm:h-5" /> : <MdVisibility className="w-4 h-4 sm:w-5 sm:h-5" />}
                       </button>
                     </div>
                     {errors.currentPassword && (
-                      <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.currentPassword}</p>
+                      <p className="mt-1 text-xs sm:text-sm text-red-600 dark:text-red-400">{errors.currentPassword}</p>
                     )}
                   </div>
 
                   {/* New Password */}
-                  <div>
+                  <div className="sm:col-span-2 lg:col-span-1">
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-300">
                       New Password
                     </label>
@@ -605,7 +617,7 @@ const Settings = () => {
                         type={showNewPassword ? "text" : "password"}
                         value={passwordData.newPassword}
                         onChange={(e) => handlePasswordChange('newPassword', e.target.value)}
-                        className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400 dark:focus:ring-orange-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 transition-colors duration-300 pr-12 ${
+                        className={`w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400 dark:focus:ring-orange-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 transition-colors duration-300 pr-12 ${
                           errors.newPassword ? 'border-red-300 dark:border-red-600' : 'border-gray-300 dark:border-gray-600'
                         }`}
                         placeholder="Enter new password"
@@ -615,16 +627,16 @@ const Settings = () => {
                         onClick={() => setShowNewPassword(!showNewPassword)}
                         className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
                       >
-                        {showNewPassword ? <MdVisibilityOff className="w-5 h-5" /> : <MdVisibility className="w-5 h-5" />}
+                        {showNewPassword ? <MdVisibilityOff className="w-4 h-4 sm:w-5 sm:h-5" /> : <MdVisibility className="w-4 h-4 sm:w-5 sm:h-5" />}
                       </button>
                     </div>
                     {errors.newPassword && (
-                      <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.newPassword}</p>
+                      <p className="mt-1 text-xs sm:text-sm text-red-600 dark:text-red-400">{errors.newPassword}</p>
                     )}
                   </div>
 
                   {/* Confirm Password */}
-                  <div>
+                  <div className="sm:col-span-2 lg:col-span-1">
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-300">
                       Confirm New Password
                     </label>
@@ -633,7 +645,7 @@ const Settings = () => {
                         type={showConfirmPassword ? "text" : "password"}
                         value={passwordData.confirmPassword}
                         onChange={(e) => handlePasswordChange('confirmPassword', e.target.value)}
-                        className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400 dark:focus:ring-orange-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 transition-colors duration-300 pr-12 ${
+                        className={`w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400 dark:focus:ring-orange-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 transition-colors duration-300 pr-12 ${
                           errors.confirmPassword ? 'border-red-300 dark:border-red-600' : 'border-gray-300 dark:border-gray-600'
                         }`}
                         placeholder="Confirm new password"
@@ -643,20 +655,21 @@ const Settings = () => {
                         onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                         className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
                       >
-                        {showConfirmPassword ? <MdVisibilityOff className="w-5 h-5" /> : <MdVisibility className="w-5 h-5" />}
+                        {showConfirmPassword ? <MdVisibilityOff className="w-4 h-4 sm:w-5 sm:h-5" /> : <MdVisibility className="w-4 h-4 sm:w-5 sm:h-5" />}
                       </button>
                     </div>
                     {errors.confirmPassword && (
-                      <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.confirmPassword}</p>
+                      <p className="mt-1 text-xs sm:text-sm text-red-600 dark:text-red-400">{errors.confirmPassword}</p>
                     )}
                   </div>
                 </div>
 
-                <div className="mt-6">
+                {/* Update Password Button */}
+                <div className="mt-4 sm:mt-6">
                   <button
                     onClick={handleUpdatePassword}
                     disabled={isUpdating || !passwordData.currentPassword || !passwordData.newPassword || !passwordData.confirmPassword}
-                    className="px-6 py-3 bg-red-500 dark:bg-red-600 text-white hover:bg-red-600 dark:hover:bg-red-700 rounded-lg transition-colors duration-300 flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full sm:w-auto px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-base bg-red-500 dark:bg-red-600 text-white hover:bg-red-600 dark:hover:bg-red-700 rounded-lg transition-colors duration-300 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {isUpdating ? (
                       <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
@@ -667,12 +680,13 @@ const Settings = () => {
                   </button>
                 </div>
 
-                <div className="mt-4 p-4 bg-yellow-50 dark:bg-yellow-900/30 border border-yellow-200 dark:border-yellow-700 rounded-lg">
+                {/* Security Tips - Responsive layout */}
+                <div className="mt-4 sm:mt-6 p-3 sm:p-4 bg-yellow-50 dark:bg-yellow-900/30 border border-yellow-200 dark:border-yellow-700 rounded-lg">
                   <div className="flex items-start space-x-3">
-                    <MdSecurity className="w-5 h-5 text-yellow-600 dark:text-yellow-400 mt-0.5" />
-                    <div>
-                      <h4 className="text-sm font-medium text-yellow-800 dark:text-yellow-300">Password Security Tips</h4>
-                      <p className="text-sm text-yellow-700 dark:text-yellow-400 mt-1">
+                    <MdSecurity className="w-4 h-4 sm:w-5 sm:h-5 text-yellow-600 dark:text-yellow-400 mt-0.5 flex-shrink-0" />
+                    <div className="min-w-0 flex-1">
+                      <h4 className="text-xs sm:text-sm font-medium text-yellow-800 dark:text-yellow-300">Password Security Tips</h4>
+                      <p className="text-xs sm:text-sm text-yellow-700 dark:text-yellow-400 mt-1 leading-relaxed">
                         Use a strong password with at least 8 characters, including uppercase, lowercase, numbers, and special characters.
                       </p>
                     </div>

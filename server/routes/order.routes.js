@@ -10,9 +10,9 @@ orderRouter.get("/user-orders", userAuth.verifyToken, orderService.getUserOrders
 orderRouter.get("/:id", userAuth.verifyToken, orderService.getOrderById);
 orderRouter.put("/cancel/:id", userAuth.verifyToken, orderService.cancelOrder);
 
-// Admin routes (require admin authentication - you should create adminAuth middleware)
 // For now using verifyToken, but you should create a separate admin middleware
 orderRouter.get("/admin/all", orderService.getAllOrders);
+orderRouter.post("/admin/create-order-by-admin", orderService.createOrder);
 orderRouter.put("/admin/status/:id", orderService.updateOrderStatus);
 
 module.exports = orderRouter;

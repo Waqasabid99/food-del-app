@@ -4,7 +4,7 @@ const userModel = require("../models/user.model");
 
 const createOrder = async (req, res) => {
   try {
-    const userId = req.userId; // From auth middleware
+    const userId =  req.body.userId || req.params.userId; // From auth middleware
     const {
       items,
       deliveryAddress,
@@ -94,7 +94,7 @@ const createOrder = async (req, res) => {
 const getOrderById = async (req, res) => {
   try {
     const orderId = req.params.id;
-    const userId = req.userId;
+    const userId = req.userId || req.params.userId || req.body.userId;
 
     // Validate ObjectId format
     if (!orderId.match(/^[0-9a-fA-F]{24}$/)) {

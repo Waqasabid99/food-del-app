@@ -163,7 +163,7 @@ const Dashboard = () => {
   // Loading state
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center px-4">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500 mx-auto mb-4"></div>
           <p className="text-gray-600 dark:text-gray-300">Loading dashboard data...</p>
@@ -190,23 +190,23 @@ const Dashboard = () => {
           />
 
           {/* Main Content */}
-          <main className="flex-1 p-6">
+          <main className="flex-1 p-3 sm:p-4 lg:p-6 w-full overflow-x-hidden">
             {activeTab === "dashboard" && (
-              <div>
+              <div className="max-w-7xl mx-auto">
                 {/* Dashboard Header */}
-                <div className="mb-8">
-                  <div className="flex items-center justify-between">
+                <div className="mb-6 sm:mb-8">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                     <div>
-                      <h2 className="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-2 transition-colors duration-300">
+                      <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 dark:text-gray-100 mb-2 transition-colors duration-300">
                         Dashboard
                       </h2>
-                      <p className="text-gray-600 dark:text-gray-300 transition-colors duration-300">
+                      <p className="text-sm sm:text-base text-gray-600 dark:text-gray-300 transition-colors duration-300">
                         Welcome back! Here's what's happening with your restaurant today.
                       </p>
                     </div>
                     <button
                       onClick={fetchDashboardData}
-                      className="px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors duration-300 flex items-center gap-2"
+                      className="px-3 py-2 sm:px-4 sm:py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors duration-300 flex items-center gap-2 text-sm sm:text-base self-start sm:self-auto"
                       disabled={loading}
                     >
                       <span className={loading ? 'animate-spin' : ''}>🔄</span>
@@ -216,77 +216,79 @@ const Dashboard = () => {
                 </div>
 
                 {/* Stats Cards */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                  <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm dark:shadow-2xl border border-gray-200 dark:border-gray-700 transition-colors duration-300">
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6 mb-6 sm:mb-8">
+                  <div className="bg-white dark:bg-gray-800 p-3 sm:p-4 lg:p-6 rounded-lg shadow-sm dark:shadow-2xl border border-gray-200 dark:border-gray-700 transition-colors duration-300">
                     <div className="flex items-center justify-between">
-                      <div>
-                        <p className="text-sm text-gray-600 dark:text-gray-300 mb-1 transition-colors duration-300">Total Orders</p>
-                        <p className="text-2xl font-bold text-gray-800 dark:text-gray-100 transition-colors duration-300">
+                      <div className="min-w-0 flex-1">
+                        <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-300 mb-1 transition-colors duration-300 truncate">
+                          Total Orders
+                        </p>
+                        <p className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-800 dark:text-gray-100 transition-colors duration-300">
                           {dashboardStats.totalOrders}
                         </p>
-                        <p className="text-xs text-blue-600 dark:text-blue-400 mt-1 transition-colors duration-300">
+                        <p className="text-xs text-blue-600 dark:text-blue-400 mt-1 transition-colors duration-300 hidden sm:block">
                           All time orders
                         </p>
                       </div>
-                      <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center transition-colors duration-300">
-                        <span className="text-blue-600 dark:text-blue-300 text-xl">🛒</span>
+                      <div className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center transition-colors duration-300 flex-shrink-0 ml-2">
+                        <span className="text-blue-600 dark:text-blue-300 text-sm sm:text-base lg:text-xl">🛒</span>
                       </div>
                     </div>
                   </div>
 
-                  <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm dark:shadow-2xl border border-gray-200 dark:border-gray-700 transition-colors duration-300">
+                  <div className="bg-white dark:bg-gray-800 p-3 sm:p-4 lg:p-6 rounded-lg shadow-sm dark:shadow-2xl border border-gray-200 dark:border-gray-700 transition-colors duration-300">
                     <div className="flex items-center justify-between">
-                      <div>
-                        <p className="text-sm text-gray-600 dark:text-gray-300 mb-1 transition-colors duration-300">
+                      <div className="min-w-0 flex-1">
+                        <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-300 mb-1 transition-colors duration-300 truncate">
                           Today's Orders
                         </p>
-                        <p className="text-2xl font-bold text-gray-800 dark:text-gray-100 transition-colors duration-300">
+                        <p className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-800 dark:text-gray-100 transition-colors duration-300">
                           {dashboardStats.todaysOrders}
                         </p>
-                        <p className="text-xs text-green-600 dark:text-green-400 mt-1 transition-colors duration-300">
+                        <p className="text-xs text-green-600 dark:text-green-400 mt-1 transition-colors duration-300 hidden sm:block">
                           Orders placed today
                         </p>
                       </div>
-                      <div className="w-12 h-12 bg-green-100 dark:bg-green-900 rounded-lg flex items-center justify-center transition-colors duration-300">
-                        <span className="text-green-600 dark:text-green-300 text-xl">📈</span>
+                      <div className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 bg-green-100 dark:bg-green-900 rounded-lg flex items-center justify-center transition-colors duration-300 flex-shrink-0 ml-2">
+                        <span className="text-green-600 dark:text-green-300 text-sm sm:text-base lg:text-xl">📈</span>
                       </div>
                     </div>
                   </div>
 
-                  <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm dark:shadow-2xl border border-gray-200 dark:border-gray-700 transition-colors duration-300">
+                  <div className="bg-white dark:bg-gray-800 p-3 sm:p-4 lg:p-6 rounded-lg shadow-sm dark:shadow-2xl border border-gray-200 dark:border-gray-700 transition-colors duration-300">
                     <div className="flex items-center justify-between">
-                      <div>
-                        <p className="text-sm text-gray-600 dark:text-gray-300 mb-1 transition-colors duration-300">
+                      <div className="min-w-0 flex-1">
+                        <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-300 mb-1 transition-colors duration-300 truncate">
                           Total Products
                         </p>
-                        <p className="text-2xl font-bold text-gray-800 dark:text-gray-100 transition-colors duration-300">
+                        <p className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-800 dark:text-gray-100 transition-colors duration-300">
                           {dashboardStats.totalProducts}
                         </p>
-                        <p className="text-xs text-blue-600 dark:text-blue-400 mt-1 transition-colors duration-300">
+                        <p className="text-xs text-blue-600 dark:text-blue-400 mt-1 transition-colors duration-300 hidden sm:block">
                           Available items
                         </p>
                       </div>
-                      <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900 rounded-lg flex items-center justify-center transition-colors duration-300">
-                        <span className="text-purple-600 dark:text-purple-300 text-xl">🍕</span>
+                      <div className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 bg-purple-100 dark:bg-purple-900 rounded-lg flex items-center justify-center transition-colors duration-300 flex-shrink-0 ml-2">
+                        <span className="text-purple-600 dark:text-purple-300 text-sm sm:text-base lg:text-xl">🍕</span>
                       </div>
                     </div>
                   </div>
 
-                  <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm dark:shadow-2xl border border-gray-200 dark:border-gray-700 transition-colors duration-300">
+                  <div className="bg-white dark:bg-gray-800 p-3 sm:p-4 lg:p-6 rounded-lg shadow-sm dark:shadow-2xl border border-gray-200 dark:border-gray-700 transition-colors duration-300">
                     <div className="flex items-center justify-between">
-                      <div>
-                        <p className="text-sm text-gray-600 dark:text-gray-300 mb-1 transition-colors duration-300">
+                      <div className="min-w-0 flex-1">
+                        <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-300 mb-1 transition-colors duration-300 truncate">
                           Total Revenue
                         </p>
-                        <p className="text-2xl font-bold text-gray-800 dark:text-gray-100 transition-colors duration-300">
+                        <p className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-800 dark:text-gray-100 transition-colors duration-300">
                           ${dashboardStats.totalRevenue.toFixed(2)}
                         </p>
-                        <p className="text-xs text-green-600 dark:text-green-400 mt-1 transition-colors duration-300">
+                        <p className="text-xs text-green-600 dark:text-green-400 mt-1 transition-colors duration-300 hidden sm:block">
                           From delivered orders
                         </p>
                       </div>
-                      <div className="w-12 h-12 bg-orange-100 dark:bg-orange-900 rounded-lg flex items-center justify-center transition-colors duration-300">
-                        <span className="text-orange-600 dark:text-orange-300 text-xl font-bold">
+                      <div className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 bg-orange-100 dark:bg-orange-900 rounded-lg flex items-center justify-center transition-colors duration-300 flex-shrink-0 ml-2">
+                        <span className="text-orange-600 dark:text-orange-300 text-sm sm:text-base lg:text-xl font-bold">
                           💰
                         </span>
                       </div>
@@ -295,13 +297,13 @@ const Dashboard = () => {
                 </div>
 
                 {/* Quick Actions */}
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-                  <div className="lg:col-span-2">
+                <div className="grid grid-cols-1 xl:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8">
+                  <div className="xl:col-span-2 order-2 xl:order-1">
                     {/* Recent Orders */}
                     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-2xl border border-gray-200 dark:border-gray-700 transition-colors duration-300">
-                      <div className="p-6 border-b border-gray-200 dark:border-gray-700 transition-colors duration-300">
+                      <div className="p-4 sm:p-6 border-b border-gray-200 dark:border-gray-700 transition-colors duration-300">
                         <div className="flex items-center justify-between">
-                          <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100 transition-colors duration-300">
+                          <h3 className="text-base sm:text-lg font-semibold text-gray-800 dark:text-gray-100 transition-colors duration-300">
                             Recent Orders
                           </h3>
                           <button 
@@ -314,42 +316,68 @@ const Dashboard = () => {
                       </div>
                       <div className="overflow-x-auto">
                         {recentOrders.length > 0 ? (
-                          <table className="w-full">
-                            <thead className="bg-gray-50 dark:bg-gray-700 transition-colors duration-300">
-                              <tr>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase transition-colors duration-300">
-                                  Order ID
-                                </th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase transition-colors duration-300">
-                                  Customer
-                                </th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase transition-colors duration-300">
-                                  Amount
-                                </th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase transition-colors duration-300">
-                                  Status
-                                </th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase transition-colors duration-300">
-                                  Time
-                                </th>
-                              </tr>
-                            </thead>
-                            <tbody className="divide-y divide-gray-200 dark:divide-gray-700 transition-colors duration-300">
+                          <div className="min-w-full">
+                            {/* Desktop Table View */}
+                            <table className="w-full hidden md:table">
+                              <thead className="bg-gray-50 dark:bg-gray-700 transition-colors duration-300">
+                                <tr>
+                                  <th className="px-4 lg:px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase transition-colors duration-300">
+                                    Order ID
+                                  </th>
+                                  <th className="px-4 lg:px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase transition-colors duration-300">
+                                    Customer
+                                  </th>
+                                  <th className="px-4 lg:px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase transition-colors duration-300">
+                                    Amount
+                                  </th>
+                                  <th className="px-4 lg:px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase transition-colors duration-300">
+                                    Status
+                                  </th>
+                                  <th className="px-4 lg:px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase transition-colors duration-300">
+                                    Time
+                                  </th>
+                                </tr>
+                              </thead>
+                              <tbody className="divide-y divide-gray-200 dark:divide-gray-700 transition-colors duration-300">
+                                {recentOrders.map((order, index) => (
+                                  <tr
+                                    key={`${order.id}-${index}`}
+                                    className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-300"
+                                  >
+                                    <td className="px-4 lg:px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 dark:text-gray-100 transition-colors duration-300">
+                                      {order.id}
+                                    </td>
+                                    <td className="px-4 lg:px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-300 transition-colors duration-300">
+                                      {order.customer}
+                                    </td>
+                                    <td className="px-4 lg:px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 dark:text-gray-100 transition-colors duration-300">
+                                      {order.amount}
+                                    </td>
+                                    <td className="px-4 lg:px-6 py-4 whitespace-nowrap">
+                                      <span
+                                        className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(
+                                          order.status
+                                        )} transition-colors duration-300`}
+                                      >
+                                        {order.status}
+                                      </span>
+                                    </td>
+                                    <td className="px-4 lg:px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400 transition-colors duration-300">
+                                      {order.time}
+                                    </td>
+                                  </tr>
+                                ))}
+                              </tbody>
+                            </table>
+                            
+                            {/* Mobile Card View */}
+                            <div className="md:hidden divide-y divide-gray-200 dark:divide-gray-700">
                               {recentOrders.map((order, index) => (
-                                <tr
-                                  key={`${order.id}-${index}`}
-                                  className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-300"
-                                >
-                                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 dark:text-gray-100 transition-colors duration-300">
-                                    {order.id}
-                                  </td>
-                                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-300 transition-colors duration-300">
-                                    {order.customer}
-                                  </td>
-                                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 dark:text-gray-100 transition-colors duration-300">
-                                    {order.amount}
-                                  </td>
-                                  <td className="px-6 py-4 whitespace-nowrap">
+                                <div key={`${order.id}-${index}`} className="p-4 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-300">
+                                  <div className="flex justify-between items-start mb-2">
+                                    <div className="font-medium text-gray-800 dark:text-gray-100 text-sm">
+                                      {order.id}
+                                    </div>
                                     <span
                                       className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(
                                         order.status
@@ -357,14 +385,22 @@ const Dashboard = () => {
                                     >
                                       {order.status}
                                     </span>
-                                  </td>
-                                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400 transition-colors duration-300">
-                                    {order.time}
-                                  </td>
-                                </tr>
+                                  </div>
+                                  <div className="text-sm text-gray-600 dark:text-gray-300 mb-1">
+                                    {order.customer}
+                                  </div>
+                                  <div className="flex justify-between items-center text-sm">
+                                    <span className="font-medium text-gray-800 dark:text-gray-100">
+                                      {order.amount}
+                                    </span>
+                                    <span className="text-gray-500 dark:text-gray-400">
+                                      {order.time}
+                                    </span>
+                                  </div>
+                                </div>
                               ))}
-                            </tbody>
-                          </table>
+                            </div>
+                          </div>
                         ) : (
                           <div className="text-center py-8">
                             <p className="text-gray-500 dark:text-gray-400">No orders found</p>
@@ -375,28 +411,31 @@ const Dashboard = () => {
                   </div>
 
                   {/* Quick Actions Card */}
-                  <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-2xl border border-gray-200 dark:border-gray-700 p-6 transition-colors duration-300">
-                    <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-4 transition-colors duration-300">
+                  <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-2xl border border-gray-200 dark:border-gray-700 p-4 sm:p-6 transition-colors duration-300 order-1 xl:order-2">
+                    <h3 className="text-base sm:text-lg font-semibold text-gray-800 dark:text-gray-100 mb-4 transition-colors duration-300">
                       Quick Actions
                     </h3>
                     <div className="space-y-3">
                       <Link 
                         to="/admin/add-product"
-                        className="w-full bg-orange-500 dark:bg-orange-600 text-white py-3 px-4 rounded-lg text-sm font-medium hover:bg-orange-600 dark:hover:bg-orange-700 transition-colors duration-300 flex items-center gap-2"
+                        className="w-full bg-orange-500 dark:bg-orange-600 text-white py-2.5 sm:py-3 px-3 sm:px-4 rounded-lg text-sm font-medium hover:bg-orange-600 dark:hover:bg-orange-700 transition-colors duration-300 flex items-center gap-2 justify-center"
                       >
-                        <IoMdAdd /> Add New Product
+                        <IoMdAdd className="text-base sm:text-lg" /> 
+                        <span className="truncate">Add New Product</span>
                       </Link>
                       <Link
                         to="/admin/add-menu"
-                        className="w-full bg-blue-500 dark:bg-blue-600 text-white py-3 px-4 rounded-lg text-sm font-medium hover:bg-blue-600 dark:hover:bg-blue-700 transition-colors duration-300 flex items-center gap-2"
+                        className="w-full bg-blue-500 dark:bg-blue-600 text-white py-2.5 sm:py-3 px-3 sm:px-4 rounded-lg text-sm font-medium hover:bg-blue-600 dark:hover:bg-blue-700 transition-colors duration-300 flex items-center gap-2 justify-center"
                       >
-                        <MdRestaurantMenu /> Add Menu Item
+                        <MdRestaurantMenu className="text-base sm:text-lg" /> 
+                        <span className="truncate">Add Menu Item</span>
                       </Link>
                       <Link
-                      to='/admin/orders'
-                        className="w-full border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-700 py-3 px-4 rounded-lg text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors duration-300 flex items-center gap-2"
+                        to='/admin/orders'
+                        className="w-full border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-700 py-2.5 sm:py-3 px-3 sm:px-4 rounded-lg text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors duration-300 flex items-center gap-2 justify-center"
                       >
-                        <span>👁️</span> View All Orders
+                        <span>👁️</span> 
+                        <span className="truncate">View All Orders</span>
                       </Link>
                     </div>
 
@@ -437,22 +476,22 @@ const Dashboard = () => {
             {activeTab === "orders" && <Orders />}
 
             {activeTab === "customers" && (
-              <div>
-                <div className="mb-8">
-                  <h2 className="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-2 transition-colors duration-300">
+              <div className="max-w-7xl mx-auto">
+                <div className="mb-6 sm:mb-8">
+                  <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 dark:text-gray-100 mb-2 transition-colors duration-300">
                     Customer Management
                   </h2>
-                  <p className="text-gray-600 dark:text-gray-300 transition-colors duration-300">
+                  <p className="text-sm sm:text-base text-gray-600 dark:text-gray-300 transition-colors duration-300">
                     View and manage customer information.
                   </p>
                 </div>
-                <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-2xl border border-gray-200 dark:border-gray-700 p-6 transition-colors duration-300">
-                  <div className="text-center py-12">
-                    <span className="text-6xl mb-4 block">👥</span>
-                    <h3 className="text-lg font-medium text-gray-800 dark:text-gray-100 mb-2 transition-colors duration-300">
+                <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-2xl border border-gray-200 dark:border-gray-700 p-4 sm:p-6 transition-colors duration-300">
+                  <div className="text-center py-8 sm:py-12">
+                    <span className="text-4xl sm:text-6xl mb-4 block">👥</span>
+                    <h3 className="text-base sm:text-lg font-medium text-gray-800 dark:text-gray-100 mb-2 transition-colors duration-300">
                       Customer Management
                     </h3>
-                    <p className="text-gray-600 dark:text-gray-300 transition-colors duration-300">
+                    <p className="text-sm sm:text-base text-gray-600 dark:text-gray-300 transition-colors duration-300">
                       Customer management interface will be implemented here.
                     </p>
                   </div>
@@ -461,18 +500,18 @@ const Dashboard = () => {
             )}
 
             {activeTab === "settings" && (
-              <div>
-                <div className="mb-8">
-                  <h2 className="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-2 transition-colors duration-300">
+              <div className="max-w-7xl mx-auto">
+                <div className="mb-6 sm:mb-8">
+                  <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 dark:text-gray-100 mb-2 transition-colors duration-300">
                     Settings
                   </h2>
-                  <p className="text-gray-600 dark:text-gray-300 transition-colors duration-300">
+                  <p className="text-sm sm:text-base text-gray-600 dark:text-gray-300 transition-colors duration-300">
                     Configure your restaurant settings and preferences.
                   </p>
                 </div>
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                  <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-2xl border border-gray-200 dark:border-gray-700 p-6 transition-colors duration-300">
-                    <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-4 transition-colors duration-300">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
+                  <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-2xl border border-gray-200 dark:border-gray-700 p-4 sm:p-6 transition-colors duration-300">
+                    <h3 className="text-base sm:text-lg font-semibold text-gray-800 dark:text-gray-100 mb-4 transition-colors duration-300">
                       Restaurant Information
                     </h3>
                     <div className="space-y-4">
@@ -509,8 +548,8 @@ const Dashboard = () => {
                     </div>
                   </div>
 
-                  <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-2xl border border-gray-200 dark:border-gray-700 p-6 transition-colors duration-300">
-                    <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-4 transition-colors duration-300">
+                  <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-2xl border border-gray-200 dark:border-gray-700 p-4 sm:p-6 transition-colors duration-300">
+                    <h3 className="text-base sm:text-lg font-semibold text-gray-800 dark:text-gray-100 mb-4 transition-colors duration-300">
                       Delivery Settings
                     </h3>
                     <div className="space-y-4">
@@ -549,8 +588,8 @@ const Dashboard = () => {
                   </div>
                 </div>
 
-                <div className="mt-6">
-                  <button className="bg-orange-500 dark:bg-orange-600 text-white px-6 py-2 rounded-md hover:bg-orange-600 dark:hover:bg-orange-700 transition-colors duration-300">
+                <div className="mt-4 sm:mt-6">
+                  <button className="bg-orange-500 dark:bg-orange-600 text-white px-4 sm:px-6 py-2 rounded-md hover:bg-orange-600 dark:hover:bg-orange-700 transition-colors duration-300 text-sm sm:text-base">
                     Save Settings
                   </button>
                 </div>
