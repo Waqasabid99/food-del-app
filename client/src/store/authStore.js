@@ -22,7 +22,7 @@ const useAdminAuthStore = create(
 
         try {
           const response = await axios.post(
-            `${API_BASE_URL}/admin/login`,
+            `${API_BASE_URL}/api/admin/login`,
             credentials,
             { withCredentials: true }
           );
@@ -61,7 +61,7 @@ const useAdminAuthStore = create(
 
         try {
           const response = await axios.post(
-            `${API_BASE_URL}/admin/register`,
+            `${API_BASE_URL}/api/admin/register`,
             adminData,
             { withCredentials: true }
           );

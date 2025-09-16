@@ -21,7 +21,7 @@ const useAuthStore = create(
         set({ isLoading: true, error: null });
         
         try {
-          const response = await axios.post(`${API_BASE_URL}/user/login`, credentials, {withCredentials: true});
+          const response = await axios.post(`${API_BASE_URL}/api/user/login`, credentials, {withCredentials: true});
           const data = await response.data;
 
           if(response.status === 200 || response.status === 201){
@@ -57,7 +57,7 @@ const useAuthStore = create(
         set({ isLoading: true, error: null });
         
         try {
-          const response = await axios.post(`${API_BASE_URL}/user/register`, userData, {withCredentials:true});
+          const response = await axios.post(`${API_BASE_URL}/api/user/register`, userData, {withCredentials:true});
           const data = await response.data;
 
           if(response.status === 200 || response.status === 201){
@@ -96,7 +96,7 @@ const useAuthStore = create(
           // Call logout endpoint (optional since JWT is stateless)
           const { token } = get();
           if (token) {
-            await fetch(`${API_BASE_URL}/user/logout`, {
+            await fetch(`${API_BASE_URL}/api/user/logout`, {
               method: 'POST',
               headers: {
                 'Authorization': `Bearer ${token}`,
@@ -129,7 +129,7 @@ const useAuthStore = create(
         set({ isLoading: true, error: null });
         
         try {
-          const response = await fetch(`${API_BASE_URL}/user/getuser/${user._id}`, {
+          const response = await fetch(`${API_BASE_URL}/api/user/getuser/${user._id}`, {
             method: 'GET',
             headers: {
               'Authorization': `Bearer ${token}`,
@@ -176,7 +176,7 @@ const useAuthStore = create(
         set({ isLoading: true, error: null });
         
         try {
-          const response = await fetch(`${API_BASE_URL}/user/update/${user._id}`, {
+          const response = await fetch(`${API_BASE_URL}/api/user/update/${user._id}`, {
             method: 'PUT',
             headers: {
               'Authorization': `Bearer ${token}`,
@@ -219,7 +219,7 @@ const useAuthStore = create(
         set({ isLoading: true, error: null });
         
         try {
-          const response = await fetch(`${API_BASE_URL}/orders/create`, {
+          const response = await fetch(`${API_BASE_URL}/api/orders/create`, {
             method: 'POST',
             headers: {
               'Authorization': `Bearer ${token}`,
@@ -261,7 +261,7 @@ const useAuthStore = create(
         set({ isLoading: true, error: null });
         
         try {
-          const response = await fetch(`${API_BASE_URL}/orders/user-orders?page=${page}&limit=${limit}`, {
+          const response = await fetch(`${API_BASE_URL}/api/orders/user-orders?page=${page}&limit=${limit}`, {
             method: 'GET',
             headers: {
               'Authorization': `Bearer ${token}`,
