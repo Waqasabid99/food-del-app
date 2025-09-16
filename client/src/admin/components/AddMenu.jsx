@@ -108,8 +108,12 @@ const AddMenu = () => {
     setIsLoading(true);
 
     try {
+       const data = new FormData();
+       data.append("name", formData.name);
+       data.append("image", formData.image);
+
       axios
-        .post(`${base_url}/api/menu/addmenu`, formData, {
+        .post(`${base_url}/api/menu/addmenu`, data, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
