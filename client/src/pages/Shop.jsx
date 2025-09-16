@@ -24,13 +24,13 @@ const Shop = ({ handleShowLogin, handleShowSignup, handleCloseAuth }) => {
     import.meta.env.VITE_BACKEND_BASE_URL || "http://localhost:5000";
 
   useEffect(() => {
-    axios.get(`${base_url}/api/food/getfood`).then((res) => {
+    axios.get(`${base_url}/api/food/getfood`, { withCredentials: true }).then((res) => {
       setFoodList(res.data.data);
     });
   }, [setFoodList]);
 
     useEffect(() => {
-    axios.get(`${base_url}/api/menu/getmenu`).then((res) => {
+    axios.get(`${base_url}/api/menu/getmenu`, { withCredentials: true }).then((res) => {
       setMenuList(res.data.data);
     });
   }, [setMenuList]);
