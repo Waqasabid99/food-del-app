@@ -189,13 +189,13 @@ const Checkout = ({ handleShowLogin, handleShowSignup, handleCloseAuth }) => {
         specialInstructions: formData.specialInstructions || "",
       };
 
-      const response = await fetch(`${base_url}/api/order/create/${user._id}`, {
+      const response = await fetch(`${base_url}/api/order/create`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(orderData),
+        body: JSON.stringify(orderData, user._id),
         withCredentials: true
       });
 
