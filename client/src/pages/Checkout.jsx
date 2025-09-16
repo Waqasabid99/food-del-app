@@ -163,6 +163,7 @@ const Checkout = ({ handleShowLogin, handleShowSignup, handleCloseAuth }) => {
 
     try {
       const orderData = {
+        userId: user._id,
         items: cart.map((item) => ({
           id: item._id || item.id,
           name: item.name,
@@ -195,7 +196,7 @@ const Checkout = ({ handleShowLogin, handleShowSignup, handleCloseAuth }) => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(orderData, user._id),
+        body: JSON.stringify(orderData),
         withCredentials: true
       });
 
