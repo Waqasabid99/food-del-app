@@ -34,7 +34,7 @@ const Dashboard = () => {
 
       // Fetch all orders
       const ordersResponse = await fetch(
-        `${API_BASE_URL}/order/admin/all?limit=50`,
+        `${API_BASE_URL}/api/order/admin/all?limit=50`,
         {
           withCredentials: true,
         }
@@ -42,13 +42,13 @@ const Dashboard = () => {
       const ordersData = await ordersResponse.json();
 
       // Fetch all products
-      const productsResponse = await fetch(`${API_BASE_URL}/food/getfood`, {
+      const productsResponse = await fetch(`${API_BASE_URL}/api/food/getfood`, {
         withCredentials: true,
       });
       const productsData = await productsResponse.json();
 
       // Fetch all users
-      const usersResponse = await fetch(`${API_BASE_URL}/user/getall`, {
+      const usersResponse = await fetch(`${API_BASE_URL}/api/user/getall`, {
         withCredentials: true,
       });
       const usersData = await usersResponse.json();
