@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import { GoPlus } from "react-icons/go";
-// import { food_list } from "../data/store";
-import { menu_list } from "../data/store";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import useAuthStore from "../store/authStore";
@@ -21,6 +19,7 @@ const Shop = ({ handleShowLogin, handleShowSignup, handleCloseAuth }) => {
   const { addToCart } = useCart();
   const { showLogin, showSignup } = useAuthStore();
   const [food_list, setFoodList] = useState([]);
+  const [menu_list, setMenuList] = useState([]);
   const base_url =
     import.meta.env.VITE_BACKEND_BASE_URL || "http://localhost:5000";
 
@@ -29,6 +28,12 @@ const Shop = ({ handleShowLogin, handleShowSignup, handleCloseAuth }) => {
       setFoodList(res.data.data);
     });
   }, [setFoodList]);
+
+    useEffect(() => {
+    axios.get(`${base_url}/api/menu/getmenu`).then((res) => {
+      setMenuList(res.data.data);
+    });
+  }, [setMenuList]);
 
   const priceRanges = [
     { label: "All Prices", value: "" },
