@@ -111,9 +111,9 @@ const AddMenu = () => {
        const data = new FormData();
        data.append("name", formData.name);
        data.append("image", formData.image);
-
+       setFormData(data);
       axios
-        .post(`${base_url}/api/menu/addmenu`, data, {
+        .post(`${base_url}/api/menu/addmenu`, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
