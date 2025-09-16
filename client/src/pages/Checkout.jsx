@@ -189,7 +189,7 @@ const Checkout = ({ handleShowLogin, handleShowSignup, handleCloseAuth }) => {
         specialInstructions: formData.specialInstructions || "",
       };
 
-      const response = await fetch(`${base_url}/api/order/create`, {
+      const response = await fetch(`${base_url}/api/order/create/${user._id}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
