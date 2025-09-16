@@ -26,7 +26,7 @@ const Menu = () => {
     import.meta.env.VITE_BACKEND_BASE_URL || "http://localhost:5000";
 
   useEffect(() => {
-    axios.get(`${base_url}/api/menu/getmenu`).then((res) => {
+    axios.get(`${base_url}/api/menu/getmenu`, { withCredentials: true }).then((res) => {
       setCategories(res.data.data);
     });
   }, [setCategories]);

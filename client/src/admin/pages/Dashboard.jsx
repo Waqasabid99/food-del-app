@@ -24,23 +24,33 @@ const Dashboard = () => {
   const { admin, logout } = useAdminAuthStore();
 
   // API base URL - adjust this to match your backend URL
-  const API_BASE_URL = import.meta.env.VITE_BACKEND_BASE_URL || 'http://localhost:5000/api';
+  const API_BASE_URL =
+    import.meta.env.VITE_BACKEND_BASE_URL || "http://localhost:5000/api";
 
   // Fetch dashboard data
   const fetchDashboardData = async () => {
     try {
       setLoading(true);
-      
+
       // Fetch all orders
-      const ordersResponse = await fetch(`${API_BASE_URL}/order/admin/all?limit=50`);
+      const ordersResponse = await fetch(
+        `${API_BASE_URL}/order/admin/all?limit=50`,
+        {
+          withCredentials: true,
+        }
+      );
       const ordersData = await ordersResponse.json();
-      
+
       // Fetch all products
-      const productsResponse = await fetch(`${API_BASE_URL}/food/getfood`);
+      const productsResponse = await fetch(`${API_BASE_URL}/food/getfood`, {
+        withCredentials: true,
+      });
       const productsData = await productsResponse.json();
-      
+
       // Fetch all users
-      const usersResponse = await fetch(`${API_BASE_URL}/user/getall`);
+      const usersResponse = await fetch(`${API_BASE_URL}/user/getall`, {
+        withCredentials: true,
+      });
       const usersData = await usersResponse.json();
 
       if (ordersData && productsData && usersData) {
@@ -55,22 +65,24 @@ const Dashboard = () => {
         tomorrow.setDate(tomorrow.getDate() + 1);
 
         // Filter today's orders
-        const todaysOrders = orders.filter(order => {
+        const todaysOrders = orders.filter((order) => {
           const orderDate = new Date(order.createdAt);
           return orderDate >= today && orderDate < tomorrow;
         });
 
         // Calculate stats
         const totalRevenue = orders
-          .filter(order => order.status === 'delivered')
+          .filter((order) => order.status === "delivered")
           .reduce((sum, order) => sum + (order.pricing?.total || 0), 0);
 
-        const pendingOrders = orders.filter(order => 
-          ['pending', 'confirmed', 'preparing', 'out_for_delivery'].includes(order.status)
+        const pendingOrders = orders.filter((order) =>
+          ["pending", "confirmed", "preparing", "out_for_delivery"].includes(
+            order.status
+          )
         ).length;
 
-        const completedOrders = orders.filter(order => 
-          order.status === 'delivered'
+        const completedOrders = orders.filter(
+          (order) => order.status === "delivered"
         ).length;
 
         // Update dashboard stats
@@ -84,19 +96,19 @@ const Dashboard = () => {
         });
 
         // Set recent orders (last 5 orders)
-        const formattedRecentOrders = orders.slice(0, 5).map(order => ({
+        const formattedRecentOrders = orders.slice(0, 5).map((order) => ({
           id: order.orderNumber || `#${order._id.slice(-6).toUpperCase()}`,
-          customer: order.userId?.name || 'Unknown Customer',
+          customer: order.userId?.name || "Unknown Customer",
           amount: `$${(order.pricing?.total || 0).toFixed(2)}`,
           status: getDisplayStatus(order.status),
           time: getTimeAgo(order.createdAt),
-          rawStatus: order.status
+          rawStatus: order.status,
         }));
 
         setRecentOrders(formattedRecentOrders);
       }
     } catch (error) {
-      console.error('Error fetching dashboard data:', error);
+      console.error("Error fetching dashboard data:", error);
       // Keep default values if fetch fails
     } finally {
       setLoading(false);
@@ -106,12 +118,12 @@ const Dashboard = () => {
   // Helper function to format order status for display
   const getDisplayStatus = (status) => {
     const statusMap = {
-      'pending': 'Pending',
-      'confirmed': 'Confirmed',
-      'preparing': 'Preparing',
-      'out_for_delivery': 'On the way',
-      'delivered': 'Delivered',
-      'cancelled': 'Cancelled'
+      pending: "Pending",
+      confirmed: "Confirmed",
+      preparing: "Preparing",
+      out_for_delivery: "On the way",
+      delivered: "Delivered",
+      cancelled: "Cancelled",
     };
     return statusMap[status] || status;
   };
@@ -121,15 +133,16 @@ const Dashboard = () => {
     const now = new Date();
     const orderDate = new Date(dateString);
     const diffInMinutes = Math.floor((now - orderDate) / (1000 * 60));
-    
-    if (diffInMinutes < 1) return 'Just now';
+
+    if (diffInMinutes < 1) return "Just now";
     if (diffInMinutes < 60) return `${diffInMinutes} mins ago`;
-    
+
     const diffInHours = Math.floor(diffInMinutes / 60);
-    if (diffInHours < 24) return `${diffInHours} hour${diffInHours > 1 ? 's' : ''} ago`;
-    
+    if (diffInHours < 24)
+      return `${diffInHours} hour${diffInHours > 1 ? "s" : ""} ago`;
+
     const diffInDays = Math.floor(diffInHours / 24);
-    return `${diffInDays} day${diffInDays > 1 ? 's' : ''} ago`;
+    return `${diffInDays} day${diffInDays > 1 ? "s" : ""} ago`;
   };
 
   const getStatusColor = (status) => {
@@ -153,10 +166,10 @@ const Dashboard = () => {
   // Fetch data on component mount
   useEffect(() => {
     fetchDashboardData();
-    
+
     // Set up polling to refresh data every 30 seconds
     const interval = setInterval(fetchDashboardData, 30000);
-    
+
     return () => clearInterval(interval);
   }, []);
 
@@ -166,7 +179,9 @@ const Dashboard = () => {
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center px-4">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500 mx-auto mb-4"></div>
-          <p className="text-gray-600 dark:text-gray-300">Loading dashboard data...</p>
+          <p className="text-gray-600 dark:text-gray-300">
+            Loading dashboard data...
+          </p>
         </div>
       </div>
     );
@@ -176,14 +191,14 @@ const Dashboard = () => {
     <>
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
         {/* Header */}
-        <AdminNavbar 
-          setSidebarCollapsed={setSidebarCollapsed} 
-          sidebarCollapsed={sidebarCollapsed} 
+        <AdminNavbar
+          setSidebarCollapsed={setSidebarCollapsed}
+          sidebarCollapsed={sidebarCollapsed}
         />
 
         <div className="flex">
           {/* Sidebar */}
-          <AdminSidebar 
+          <AdminSidebar
             activeTab={activeTab}
             setActiveTab={setActiveTab}
             sidebarCollapsed={sidebarCollapsed}
@@ -201,7 +216,8 @@ const Dashboard = () => {
                         Dashboard
                       </h2>
                       <p className="text-sm sm:text-base text-gray-600 dark:text-gray-300 transition-colors duration-300">
-                        Welcome back! Here's what's happening with your restaurant today.
+                        Welcome back! Here's what's happening with your
+                        restaurant today.
                       </p>
                     </div>
                     <button
@@ -209,7 +225,7 @@ const Dashboard = () => {
                       className="px-3 py-2 sm:px-4 sm:py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors duration-300 flex items-center gap-2 text-sm sm:text-base self-start sm:self-auto"
                       disabled={loading}
                     >
-                      <span className={loading ? 'animate-spin' : ''}>🔄</span>
+                      <span className={loading ? "animate-spin" : ""}>🔄</span>
                       Refresh
                     </button>
                   </div>
@@ -231,7 +247,9 @@ const Dashboard = () => {
                         </p>
                       </div>
                       <div className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center transition-colors duration-300 flex-shrink-0 ml-2">
-                        <span className="text-blue-600 dark:text-blue-300 text-sm sm:text-base lg:text-xl">🛒</span>
+                        <span className="text-blue-600 dark:text-blue-300 text-sm sm:text-base lg:text-xl">
+                          🛒
+                        </span>
                       </div>
                     </div>
                   </div>
@@ -250,7 +268,9 @@ const Dashboard = () => {
                         </p>
                       </div>
                       <div className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 bg-green-100 dark:bg-green-900 rounded-lg flex items-center justify-center transition-colors duration-300 flex-shrink-0 ml-2">
-                        <span className="text-green-600 dark:text-green-300 text-sm sm:text-base lg:text-xl">📈</span>
+                        <span className="text-green-600 dark:text-green-300 text-sm sm:text-base lg:text-xl">
+                          📈
+                        </span>
                       </div>
                     </div>
                   </div>
@@ -269,7 +289,9 @@ const Dashboard = () => {
                         </p>
                       </div>
                       <div className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 bg-purple-100 dark:bg-purple-900 rounded-lg flex items-center justify-center transition-colors duration-300 flex-shrink-0 ml-2">
-                        <span className="text-purple-600 dark:text-purple-300 text-sm sm:text-base lg:text-xl">🍕</span>
+                        <span className="text-purple-600 dark:text-purple-300 text-sm sm:text-base lg:text-xl">
+                          🍕
+                        </span>
                       </div>
                     </div>
                   </div>
@@ -306,7 +328,7 @@ const Dashboard = () => {
                           <h3 className="text-base sm:text-lg font-semibold text-gray-800 dark:text-gray-100 transition-colors duration-300">
                             Recent Orders
                           </h3>
-                          <button 
+                          <button
                             onClick={() => setActiveTab("orders")}
                             className="text-orange-500 dark:text-orange-400 text-sm hover:text-orange-600 dark:hover:text-orange-300 transition-colors duration-300"
                           >
@@ -369,11 +391,14 @@ const Dashboard = () => {
                                 ))}
                               </tbody>
                             </table>
-                            
+
                             {/* Mobile Card View */}
                             <div className="md:hidden divide-y divide-gray-200 dark:divide-gray-700">
                               {recentOrders.map((order, index) => (
-                                <div key={`${order.id}-${index}`} className="p-4 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-300">
+                                <div
+                                  key={`${order.id}-${index}`}
+                                  className="p-4 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-300"
+                                >
                                   <div className="flex justify-between items-start mb-2">
                                     <div className="font-medium text-gray-800 dark:text-gray-100 text-sm">
                                       {order.id}
@@ -403,7 +428,9 @@ const Dashboard = () => {
                           </div>
                         ) : (
                           <div className="text-center py-8">
-                            <p className="text-gray-500 dark:text-gray-400">No orders found</p>
+                            <p className="text-gray-500 dark:text-gray-400">
+                              No orders found
+                            </p>
                           </div>
                         )}
                       </div>
@@ -416,25 +443,25 @@ const Dashboard = () => {
                       Quick Actions
                     </h3>
                     <div className="space-y-3">
-                      <Link 
+                      <Link
                         to="/admin/add-product"
                         className="w-full bg-orange-500 dark:bg-orange-600 text-white py-2.5 sm:py-3 px-3 sm:px-4 rounded-lg text-sm font-medium hover:bg-orange-600 dark:hover:bg-orange-700 transition-colors duration-300 flex items-center gap-2 justify-center"
                       >
-                        <IoMdAdd className="text-base sm:text-lg" /> 
+                        <IoMdAdd className="text-base sm:text-lg" />
                         <span className="truncate">Add New Product</span>
                       </Link>
                       <Link
                         to="/admin/add-menu"
                         className="w-full bg-blue-500 dark:bg-blue-600 text-white py-2.5 sm:py-3 px-3 sm:px-4 rounded-lg text-sm font-medium hover:bg-blue-600 dark:hover:bg-blue-700 transition-colors duration-300 flex items-center gap-2 justify-center"
                       >
-                        <MdRestaurantMenu className="text-base sm:text-lg" /> 
+                        <MdRestaurantMenu className="text-base sm:text-lg" />
                         <span className="truncate">Add Menu Item</span>
                       </Link>
                       <Link
-                        to='/admin/orders'
+                        to="/admin/orders"
                         className="w-full border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-700 py-2.5 sm:py-3 px-3 sm:px-4 rounded-lg text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors duration-300 flex items-center gap-2 justify-center"
                       >
-                        <span>👁️</span> 
+                        <span>👁️</span>
                         <span className="truncate">View All Orders</span>
                       </Link>
                     </div>
@@ -446,23 +473,34 @@ const Dashboard = () => {
                       </h4>
                       <div className="space-y-2">
                         <div className="flex justify-between text-sm">
-                          <span className="text-gray-600 dark:text-gray-300 transition-colors duration-300">Pending Orders</span>
+                          <span className="text-gray-600 dark:text-gray-300 transition-colors duration-300">
+                            Pending Orders
+                          </span>
                           <span className="font-medium text-orange-600 dark:text-orange-400 transition-colors duration-300">
                             {dashboardStats.pendingOrders}
                           </span>
                         </div>
                         <div className="flex justify-between text-sm">
-                          <span className="text-gray-600 dark:text-gray-300 transition-colors duration-300">Completed Orders</span>
+                          <span className="text-gray-600 dark:text-gray-300 transition-colors duration-300">
+                            Completed Orders
+                          </span>
                           <span className="font-medium text-green-600 dark:text-green-400 transition-colors duration-300">
                             {dashboardStats.completedOrders}
                           </span>
                         </div>
                         <div className="flex justify-between text-sm">
-                          <span className="text-gray-600 dark:text-gray-300 transition-colors duration-300">Success Rate</span>
+                          <span className="text-gray-600 dark:text-gray-300 transition-colors duration-300">
+                            Success Rate
+                          </span>
                           <span className="font-medium text-blue-600 dark:text-blue-400 transition-colors duration-300">
-                            {dashboardStats.totalOrders > 0 
-                              ? Math.round((dashboardStats.completedOrders / dashboardStats.totalOrders) * 100)
-                              : 0}%
+                            {dashboardStats.totalOrders > 0
+                              ? Math.round(
+                                  (dashboardStats.completedOrders /
+                                    dashboardStats.totalOrders) *
+                                    100
+                                )
+                              : 0}
+                            %
                           </span>
                         </div>
                       </div>

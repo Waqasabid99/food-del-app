@@ -196,6 +196,7 @@ const Checkout = ({ handleShowLogin, handleShowSignup, handleCloseAuth }) => {
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(orderData),
+        withCredentials: true
       });
 
       const result = await response.json();

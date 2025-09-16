@@ -51,6 +51,7 @@ const UserDashboard = ({ handleShowLogin }) => {
           'Authorization': `Bearer ${authToken}`,
           'Content-Type': 'application/json',
         },
+        withCredentials: true
       });
 
       const data = await response.json();

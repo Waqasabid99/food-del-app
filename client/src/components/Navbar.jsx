@@ -24,7 +24,7 @@ const Navbar = ({ handleShowLogin, handleShowSignup, handleCloseAuth }) => {
   const { isAuthenticated, user, logout } = useAuth();
 
   useEffect(() => {
-    axios.get(`${base_url}/api/food/getfood`).then((res) => {
+    axios.get(`${base_url}/api/food/getfood`, { withCredentials: true }).then((res) => {
       setFoodList(res.data.data);
     });
   }, [setFoodList]);

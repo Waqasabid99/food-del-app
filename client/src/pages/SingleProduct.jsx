@@ -26,13 +26,13 @@ const SingleProduct = ({
     import.meta.env.VITE_BACKEND_BASE_URL || "http://localhost:5000";
 
   useEffect(() => {
-    axios.get(`${base_url}/api/food/getfood`).then((res) => {
+    axios.get(`${base_url}/api/food/getfood`, { withCredentials: true }).then((res) => {
       setFoodList(res.data.data);
     });
   }, [setFoodList]);
 
   useEffect(() => {
-    axios.get(`${base_url}/api/food/getfood/${id}`).then((res) => {
+    axios.get(`${base_url}/api/food/getfood/${id}`, { withCredentials: true }).then((res) => {
       setProduct(res.data.data);
       console.log(product);
     });

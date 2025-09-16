@@ -28,7 +28,9 @@ const Products = () => {
 
   const fetchProducts = async () => {
     try {
-      const response = await axios.get(`${base_url}/api/food/getfood`);
+      const response = await axios.get(`${base_url}/api/food/getfood`, {
+        withCredentials: true,
+      });
       setFoodList(response.data.data);
       setProducts(response.data.data);
     } catch (error) {
@@ -43,7 +45,7 @@ const Products = () => {
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {
-    axios.get(`${base_url}/api/menu/getmenu`).then((res) => {
+    axios.get(`${base_url}/api/menu/getmenu`, { withCredentials: true }).then((res) => {
       setCategories(res.data.data);
     });
   }, [setCategories]);

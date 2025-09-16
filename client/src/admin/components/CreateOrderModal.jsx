@@ -71,7 +71,9 @@ const CreateOrderModal = ({ showCreateModal, setShowCreateModal, token, base_url
 
   const fetchUsers = async () => {
     try {
-      const response = await axios.get(`${base_url}/api/user/getall`);
+      const response = await axios.get(`${base_url}/api/user/getall`, {
+        withCredentials: true
+      });
       if (response.data && response.data.users) {
         setUsers(response.data.users);
       }
@@ -82,7 +84,9 @@ const CreateOrderModal = ({ showCreateModal, setShowCreateModal, token, base_url
 
   const fetchFoods = async () => {
     try {
-      const response = await axios.get(`${base_url}/api/food/getfood`);
+      const response = await axios.get(`${base_url}/api/food/getfood`, {
+        withCredentials: true
+      });
       if (response.data && response.data.data) {
         // Filter only available foods
         const availableFoods = response.data.data.filter(food => food.isAvailable !== false);
@@ -243,7 +247,7 @@ const CreateOrderModal = ({ showCreateModal, setShowCreateModal, token, base_url
           phone: newUserData.phone,
           email: newUserData.email,
           password: "defaultpassword123"
-        });
+        }, { withCredentials: true });
 
         if (userResponse.data && userResponse.data.user) {
           userId = userResponse.data.user._id;

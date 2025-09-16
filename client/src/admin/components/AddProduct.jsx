@@ -29,7 +29,7 @@ const AddProduct = () => {
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {
-    axios.get(`${base_url}/api/menu/getmenu`).then((res) => {
+    axios.get(`${base_url}/api/menu/getmenu`, { withCredentials: true }).then((res) => {
       setCategories(res.data.data);
     })
   }, [categories])
