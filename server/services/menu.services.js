@@ -3,20 +3,25 @@ const fs = require("fs");
 const path = require("path");
 
 const createMenu = async (req, res) => {
-     let image_name = `${req.file.filename}`;
-    const menu_item = new MenuModel({
-        name: req.body.name,
-        image: image_name
-    })
-    try {
-        const savedItem = await menu_item.save();
-        res.json({ status: 200, data: savedItem });
-        console.log({ status: 200, data: savedItem });
-    } catch (err) {
-        res.json({ status: 500, data: err });
-        console.log({ status: 500, data: err });
+  try {
+    if (!req.file) {
+      return res.status(400).json({ success: false, error: "Image is required" });
     }
-}
+
+    const menu_item = new MenuModel({
+      name: req.body.name,
+      image: req.file.filename
+    });
+
+    const savedItem = await menu_item.save();
+    console.log({ success: true, data: savedItem });
+    res.status(200).json({ success: true, data: savedItem });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, error: err.message });
+  }
+};
 
 const menu_list = async (req, res) => {
     try {

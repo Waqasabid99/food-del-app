@@ -11,6 +11,7 @@ const path = require("path");
 const userRouter = require("./routes/user.routes");
 const orderRouter = require("./routes/order.routes");
 const adminRouter = require("./routes/admin.routes");
+
 //Middleware
 app.use(express.json())
 app.use(bodyParser.json());
