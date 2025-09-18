@@ -109,10 +109,7 @@ const AddMenu = () => {
     setIsLoading(true);
 
     try {
-      const formData = new FormData();
-      formData.append("name", formData.name);
-      formData.append("isAvailable", formData.isAvailable);
-      formData.append("image", formData.image);
+      // Simulate API call
       axios
         .post(`${base_url}/api/menu/addmenu`, formData, {
           headers: {
