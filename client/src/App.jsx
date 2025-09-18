@@ -23,6 +23,11 @@ const App = () => {
   const [showSignup, setShowSignup] = useState(false);
   const { isAuthenticated } = useAuthStore();
 
+  navigator.geolocation.getCurrentPosition((position) => {
+    localStorage.setItem("latitude", position.coords.latitude);
+    localStorage.setItem("longitude", position.coords.longitude);
+  });
+  
   //handleShowLogin
   const handleShowLogin = () => {
     if (!showLogin) {
