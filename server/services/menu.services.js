@@ -4,10 +4,6 @@ const path = require("path");
 
 const createMenu = async (req, res) => {
   try {
-    if (!req.file) {
-      return res.status(400).json({ success: false, error: "Image is required" });
-    }
-
     const menu_item = new MenuModel({
       name: req.body.name,
       image: req.file.filename
