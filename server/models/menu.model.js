@@ -19,7 +19,7 @@ const MenuSchema = new mongoose.Schema({
     },
     isAvailable: {
         type: Boolean,
-        required: true
+        required: false
     }
 })
 
