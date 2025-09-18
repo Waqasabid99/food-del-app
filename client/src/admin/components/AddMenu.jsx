@@ -19,6 +19,7 @@ const AddMenu = () => {
 
   const [formData, setFormData] = useState({
     name: "",
+    isAvailable: true,
     image: null,
   });
 
@@ -108,10 +109,9 @@ const AddMenu = () => {
     setIsLoading(true);
 
     try {
-       const data = new FormData();
-       data.append("name", formData.name);
-       data.append("image", formData.image);
-       setFormData(data);
+      const formData = new FormData();
+      formData.append("name", formData.name);
+      formData.append("image", formData.image);
       axios
         .post(`${base_url}/api/menu/addmenu`, formData, {
           headers: {
@@ -133,6 +133,7 @@ const AddMenu = () => {
       // Reset form
       setFormData({
         name: "",
+        isAvailable: true,
         image: null,
       });
       setImagePreview(null);
@@ -219,6 +220,23 @@ const AddMenu = () => {
                   <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 transition-colors duration-300">
                     Minimum 3 characters
                   </p>
+                </div>
+
+                {/* Availability Toggle */}
+                <div className="mt-6">
+                  <div className="flex items-center gap-3">
+                    <input
+                      type="checkbox"
+                      id="isAvailable"
+                      name="isAvailable"
+                      checked={formData.isAvailable}
+                      onChange={handleInputChange}
+                      className="w-4 h-4 text-orange-500 dark:text-orange-400 bg-gray-100 dark:bg-gray-600 border-gray-300 dark:border-gray-500 rounded focus:ring-orange-500 dark:focus:ring-orange-400 transition-colors duration-300"
+                    />
+                    <label htmlFor="isAvailable" className="text-sm font-medium text-gray-600 dark:text-gray-300 transition-colors duration-300">
+                      Product is available for ordering
+                    </label>
+                  </div>
                 </div>
               </div>
 
