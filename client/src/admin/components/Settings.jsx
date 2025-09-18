@@ -224,7 +224,7 @@ const Settings = () => {
 
     setIsUpdating(true);
     try {
-      // Note: You'll need to create a password update endpoint
+      // Call password update endpoint
       const response = await axios.put(
         `${base_url}/api/admin/update-password/${admin._id}`,
         {
@@ -530,7 +530,7 @@ const Settings = () => {
               </div>
 
               {/* Security Settings */}
-              <div className="bg-white dark:bg-gray-800 rounded-xl sm:rounded-2xl shadow-sm dark:shadow-2xl border border-gray-100 dark:border-gray-700 p-4 sm:p-6 transition-colors duration-300">
+              {/* <div className="bg-white dark:bg-gray-800 rounded-xl sm:rounded-2xl shadow-sm dark:shadow-2xl border border-gray-100 dark:border-gray-700 p-4 sm:p-6 transition-colors duration-300">
                 <div className="flex items-center space-x-3 mb-4 sm:mb-6">
                   <div className="p-2 bg-red-100 dark:bg-red-900/30 rounded-lg flex-shrink-0">
                     <MdSecurity className="w-4 h-4 sm:w-5 sm:h-5 text-red-600 dark:text-red-400" />
@@ -555,7 +555,7 @@ const Settings = () => {
                     <span className="text-xs text-gray-400">→</span>
                   </button>
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
 
