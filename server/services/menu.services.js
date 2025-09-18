@@ -4,9 +4,10 @@ const path = require("path");
 
 const createMenu = async (req, res) => {
   try {
+    const image_name = `${req.file.filename}`;
     const menu_item = new MenuModel({
       name: req.body.name,
-      image: req.file.filename
+      image: image_name
     });
 
     const savedItem = await menu_item.save();
