@@ -11,7 +11,7 @@ const path = require("path");
 const userRouter = require("./routes/user.routes");
 const orderRouter = require("./routes/order.routes");
 const adminRouter = require("./routes/admin.routes");
-const foodModel = require("../models/food.model");
+const foodModel = require("./models/food.model");
 
 const foods = [
   { name: "Greek salad", category: "Salad", price: 12, image: "food_1.png", isAvailable: true },
