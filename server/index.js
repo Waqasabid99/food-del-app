@@ -70,7 +70,7 @@ app.use(cors({
 connectDB();
 async function seedData() {
   try {
-    await foods.insertMany(foods);
+    await foodModel.insertMany(foods);
     console.log("✅ Foods inserted successfully!");
     mongoose.connection.close();
   } catch (err) {
